@@ -1,0 +1,50 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="search-form.html">
+<link rel="import" href="scrollable-list.html">
+
+<dom-module id="search-book">
+  <template>
+
+    <style>
+
+    </style>
+
+    <search-form id="search-form" results={{searchResults}}></search-form>
+    <div id="listcontainer"></div>
+    <scrollable-list id="scrollableList"></scrollable-list>
+  </template>
+
+  <script>
+    Polymer({
+      is: "search-book",
+      properties: {
+        searchResults: {
+          type: Array,
+          observer: "setResultsInList"
+        }
+      },
+
+      // testMethod: function() {
+      //   document.getElementById("scrollableList").books = this.searchResults;
+      // },
+
+      setResultsInList: function() {
+        // console.log("setResultsInList");
+        // if (document.getElementById("scrollable-list") === null) {
+        //   var list = document.createElement("scrollable-list");
+        //   list.setAttribute("id", "scrollableList");
+        //   this.$.listcontainer.appendChild(list);
+        //   console.log("madelist");
+        // }
+        // testMethod();
+        /*json moet nog in list*/
+        // console.log("appenddata");
+        // document.getElementById("scrollableList").books = this.searchResults;
+        this.$.scrollableList.books = this.searchResults;
+      }
+
+
+
+    });
+  </script>
+</dom-module>

@@ -1,0 +1,86 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="form-line.html">
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+<dom-module id="search-form">
+  <template>
+
+    <style>
+
+      #container {
+        width: 280px;
+        height: 200px;
+        background-color: #007936;
+        padding: 10px;
+      }
+
+      #search-button {
+        font-family: 'Roboto', sans-serif;
+        background-color: rgb(107, 107, 107);
+        color: white;
+        float: right;
+      }
+
+      #search-button:hover {
+        background-color: #479C5E;
+      }
+
+    </style>
+
+    <iron-ajax
+      id="requestBooks"
+      url="http://localhost:9999/SogyoLibrary/rest/books"
+      handle-as="json"
+      on-response="handleResponse">
+    </iron-ajax>
+
+    <div id="container">
+      <form-line id=formlinetitle name="Titel"></form-line>
+      <form-line id=formlineauthor name="Auteur"></form-line>
+      <form-line id=formlineisbn name="ISBN"></form-line>
+
+      <paper-button raised id="search-button" on-tap="showBooks">Zoeken</paper-button>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: "search-form",
+      properties: {
+        title: String,
+        author: String,
+        isbn: String,
+        results: {
+          type: Array,
+          notify: true
+        }
+      },
+      showBooks: function() {
+        this.title = this.$.formlinetitle.value;
+        this.author = this.$.formlineauthor.value;
+        this.isbn = this.$.formlineisbn.value;
+
+        this.$.requestBooks.generateRequest();
+
+
+        /*window.location.href = "/SogyoLibrary/search"*/
+
+      },
+
+      handleResponse: function(data) {
+        this.results = data.detail.response;
+        console.log("handleResponse");
+      }
+    });
+
+    /*class SearchForm extends Polymer.Element {
+      static get is() { return 'search-form'; }
+    }
+
+    window.customElements.define(SearchForm.is, SearchForm);*/
+  </script>
+
+</dom-module>
