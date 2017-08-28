@@ -61,7 +61,10 @@
       is: "book-form",
       properties: {
         bookInformation: Object,
-        successMessage: Object
+        successMessage: {
+          type: Object,
+          notify: true
+        }
       },
 
       sendJson: function() {
@@ -78,11 +81,16 @@
           language: this.$.formLineLanguage.getInputValue()
         }
         console.log(this.bookInformation);
+        console.log(typeof this.successMessage);
+        console.log(this.successMessage);
         this.$.addBook.generateRequest();
       },
 
-      handleResponse: function() {
+      handleResponse: function(data) {
         this.successMessage = data.detail.response;
+        console.log("handleResponse");
+        console.log(typeof this.successMessage)
+        console.log(this.successMessage);
       }
     });
   </script>

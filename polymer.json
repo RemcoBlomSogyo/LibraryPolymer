@@ -11,7 +11,8 @@
     "src/form-line.html",
     "src/list-item.html",
     "src/book-form.html",
-    "src/scrollable-list"
+    "src/scrollable-list.html",
+    "src/add-book.html"
   ],
   "sources": [
     "src/**/*",

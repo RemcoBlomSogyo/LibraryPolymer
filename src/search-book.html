@@ -10,7 +10,6 @@
     </style>
 
     <search-form id="search-form" results={{searchResults}}></search-form>
-    <div id="listcontainer"></div>
     <scrollable-list id="scrollableList"></scrollable-list>
   </template>
 
@@ -26,6 +25,7 @@
 
       setResultsInList: function() {
         this.$.scrollableList.books = this.searchResults;
+        console.log("setResultsInList");
       }
 
 
