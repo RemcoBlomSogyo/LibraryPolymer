@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="form-line.html">
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
@@ -9,8 +10,8 @@
     <style>
 
       #container {
-        width: 330px;
-        height: 450px;
+        width: 360px;
+        height: 550px;
         background-color: #007936;
         padding: 10px;
       }
@@ -28,17 +29,29 @@
 
     </style>
 
-    <div id="container">
-      <form-line name="Titel"></form-line>
-      <form-line name="Subtitel"></form-line>
-      <form-line name="Categorie"></form-line>
-      <form-line name="Uitgever"></form-line>
-      <form-line name="Publicatiejaar"></form-line>
-      <form-line name="ISBN"></form-line>
-      <form-line name="Bladzijdes"></form-line>
-      <form-line name="Taal"></form-line>
+    <iron-ajax
+      id="addBook"
+      url="http://localhost:9999/SogyoLibrary/rest/book/add"
+      content-type="application/json"
+      method="POST"
+      body={{bookInformation}}
+      handle-as="json"
+      on-response="handleResponse">
+    </iron-ajax>
 
-      <paper-button raised id="search-button" on-tap="showNoBooks">Toevoegen</paper-button>
+    <div id="container">
+      <form-line id="formLineTitle" name="Titel"></form-line>
+      <form-line id="formLineSubtitle" name="Subtitel"></form-line>
+      <form-line id="formLineAuthorForename" name="Auteur voornaam"></form-line>
+      <form-line id="formLineAuthorSurname" name="Auteur achternaam"></form-line>
+      <form-line id="formLineCategory" name="Categorie"></form-line>
+      <form-line id="formLinePublisher" name="Uitgever"></form-line>
+      <form-line id="formLineYearFirstPublication" name="Publicatiejaar"></form-line>
+      <form-line id="formLineISBN" name="ISBN"></form-line>
+      <form-line id="formLinePages" name="Bladzijdes"></form-line>
+      <form-line id="formLineLanguage" name="Taal"></form-line>
+
+      <paper-button raised id="search-button" on-tap="sendJson">Toevoegen</paper-button>
     </div>
 
   </template>
@@ -46,8 +59,30 @@
   <script>
     Polymer({
       is: "book-form",
-      showNoBooks: function() {
-        window.location.href = "/SogyoLibrary/search"
+      properties: {
+        bookInformation: Object,
+        successMessage: Object
+      },
+
+      sendJson: function() {
+        this.bookInformation = {
+          title: this.$.formLineTitle.getInputValue(),
+          subtitle: this.$.formLineSubtitle.getInputValue(),
+          authorForename: this.$.formLineAuthorForename.getInputValue(),
+          authorSurname: this.$.formLineAuthorSurname.getInputValue(),
+          category: this.$.formLineCategory.getInputValue(),
+          publisher: this.$.formLinePublisher.getInputValue(),
+          yearFirstPublication: this.$.formLineYearFirstPublication.getInputValue(),
+          isbn: this.$.formLineISBN.getInputValue(),
+          pages: this.$.formLinePages.getInputValue(),
+          language: this.$.formLineLanguage.getInputValue()
+        }
+        console.log(this.bookInformation);
+        this.$.addBook.generateRequest();
+      },
+
+      handleResponse: function() {
+        this.successMessage = data.detail.response;
       }
     });
   </script>

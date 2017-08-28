@@ -26,7 +26,7 @@
     </style>
 
     <div class="form-line-container">
-      <input type="text">{{value}}</input>
+      <input id=inputField type="text"></input>
       <p>{{name}}</p>
     </div>
 
@@ -37,7 +37,14 @@
       is: "form-line",
       properties: {
         name: String,
-        value: String
+        inputID: String
+      },
+      getInputValue: function() {
+        // return document.getElementsByTagName("input")[0].value;
+        // var idOfInput = input.id;
+        // return input.value;
+        //return document.getElementsByTagName("INPUT")[0].value;
+        return this.$.inputField.value;
       }
     });
   </script>
