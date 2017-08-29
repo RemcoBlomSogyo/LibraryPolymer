@@ -9,21 +9,28 @@
 
     <style>
 
+      * {
+        font-family: 'Roboto', sans-serif;
+        color: white;
+      }
+
       #container {
-        width: 360px;
+        width: 370px;
         height: 550px;
         background-color: #007936;
         padding: 10px;
       }
 
-      #search-button {
-        font-family: 'Roboto', sans-serif;
+      p {
+        display: inline-block;
+      }
+
+      #add-button {
         background-color: rgb(107, 107, 107);
-        color: white;
         float: right;
       }
 
-      #search-button:hover {
+      #add-button:hover {
         background-color: #479C5E;
       }
 
@@ -39,19 +46,27 @@
       on-response="handleResponse">
     </iron-ajax>
 
+    <!-- <iron-ajax
+      id="addBook"
+      url="http://localhost:9999/SogyoLibrary/rest/book/add"
+      handle-as="json"
+      on-response="handleResponse">
+    </iron-ajax> -->
+
     <div id="container">
-      <form-line id="formLineTitle" name="Titel"></form-line>
+      <form-line id="formLineTitle" name="Titel *"></form-line>
       <form-line id="formLineSubtitle" name="Subtitel"></form-line>
-      <form-line id="formLineAuthorForename" name="Auteur voornaam"></form-line>
-      <form-line id="formLineAuthorSurname" name="Auteur achternaam"></form-line>
-      <form-line id="formLineCategory" name="Categorie"></form-line>
-      <form-line id="formLinePublisher" name="Uitgever"></form-line>
+      <form-line id="formLineAuthorForename" name="Auteur voornaam *"></form-line>
+      <form-line id="formLineAuthorSurname" name="Auteur achternaam *"></form-line>
+      <form-line id="formLineCategory" name="Categorie *"></form-line>
+      <form-line id="formLinePublisher" name="Uitgever *"></form-line>
       <form-line id="formLineYearFirstPublication" name="Publicatiejaar"></form-line>
-      <form-line id="formLineISBN" name="ISBN"></form-line>
+      <form-line id="formLineISBN" name="ISBN *"></form-line>
       <form-line id="formLinePages" name="Bladzijdes"></form-line>
       <form-line id="formLineLanguage" name="Taal"></form-line>
+      <p>* verplicht veld</p>
 
-      <paper-button raised id="search-button" on-tap="sendJson">Toevoegen</paper-button>
+      <paper-button raised id="add-button" on-tap="getFormInput">Toevoegen</paper-button>
     </div>
 
   </template>
@@ -67,7 +82,7 @@
         }
       },
 
-      sendJson: function() {
+      getFormInput: function() {
         this.bookInformation = {
           title: this.$.formLineTitle.getInputValue(),
           subtitle: this.$.formLineSubtitle.getInputValue(),
@@ -79,18 +94,61 @@
           isbn: this.$.formLineISBN.getInputValue(),
           pages: this.$.formLinePages.getInputValue(),
           language: this.$.formLineLanguage.getInputValue()
-        }
-        console.log(this.bookInformation);
-        console.log(typeof this.successMessage);
-        console.log(this.successMessage);
-        this.$.addBook.generateRequest();
+        };
+        this.validateInput();
       },
 
       handleResponse: function(data) {
         this.successMessage = data.detail.response;
-        console.log("handleResponse");
-        console.log(typeof this.successMessage)
-        console.log(this.successMessage);
+      },
+
+      validateInput: function() {
+        var validateMessage = {commandSucceeded: false, message: ""};
+        if (this.bookInformation.title === "") {
+          validateMessage.message = "Vul een titel in";
+        } else if (this.bookInformation.authorForename === "") {
+          validateMessage.message = "Vul een voornaam in";
+        } else if (this.bookInformation.authorSurname === "") {
+          validateMessage.message = "Vul een achternaam in";
+        } else if (this.bookInformation.category === "") {
+          validateMessage.message = "Vul een categorie in";
+        } else if (this.bookInformation.publisher === "") {
+          validateMessage.message = "Vul een uitgever in";
+        } else if (this.bookInformation.isbn === "") {
+          validateMessage.message = "Vul een ISBN in";
+        } else if (this.isbnIsNotValid(this.bookInformation.isbn)) {
+          validateMessage.message = "Opgegeven ISBN is onjuist";
+        } else {
+          validateMessage.commandSucceeded = true;
+        }
+
+        if (validateMessage.commandSucceeded) {
+          this.$.addBook.generateRequest();
+        } else {
+          this.successMessage = validateMessage;
+        }
+      },
+
+      isbnIsNotValid: function(isbn) {
+        if (isbn.length !== 13) {
+          return true;
+        } else if (isbn.substring(0, 3) !== "978" && isbn.substring(0, 3) !== "979") {
+          return true;
+        } else if (this.calculateCheckDigitISBN(isbn) !== Number(isbn.charAt(12))) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+
+      calculateCheckDigitISBN: function(isbn) {
+        return Math.abs(((Number(isbn.charAt(1)) + Number(isbn.charAt(3))
+        + Number(isbn.charAt(5)) + Number(isbn.charAt(7))
+        + Number(isbn.charAt(9)) + Number(isbn.charAt(11))) * 3
+        + Number(isbn.charAt(0)) + Number(isbn.charAt(2))
+        + Number(isbn.charAt(4)) + Number(isbn.charAt(6))
+        + Number(isbn.charAt(8)) + Number(isbn.charAt(10)))
+        % 10 - 10);
       }
     });
   </script>
