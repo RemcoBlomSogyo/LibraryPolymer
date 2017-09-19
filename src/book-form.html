@@ -142,13 +142,19 @@
       },
 
       calculateCheckDigitISBN: function(isbn) {
-        return Math.abs(((Number(isbn.charAt(1)) + Number(isbn.charAt(3))
+        var checkDigit = Math.abs(((Number(isbn.charAt(1)) + Number(isbn.charAt(3))
         + Number(isbn.charAt(5)) + Number(isbn.charAt(7))
         + Number(isbn.charAt(9)) + Number(isbn.charAt(11))) * 3
         + Number(isbn.charAt(0)) + Number(isbn.charAt(2))
         + Number(isbn.charAt(4)) + Number(isbn.charAt(6))
         + Number(isbn.charAt(8)) + Number(isbn.charAt(10)))
         % 10 - 10);
+
+        if (checkDigit == 10) {
+          checkDigit = 0;
+        }
+
+        return checkDigit;
       }
     });
   </script>

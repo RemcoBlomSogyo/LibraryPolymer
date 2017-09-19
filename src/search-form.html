@@ -31,7 +31,7 @@
 
     <iron-ajax
       id="requestBooks"
-      url="http://localhost:9999/SogyoLibrary/rest/books"
+      url="http://localhost:9999/SogyoLibrary/rest/books?title={{title}}&author={{author}}&isbn={{isbn}}"
       handle-as="json"
       on-response="handleResponse">
     </iron-ajax>
@@ -59,9 +59,9 @@
         }
       },
       showBooks: function() {
-        this.title = this.$.formlinetitle.value;
-        this.author = this.$.formlineauthor.value;
-        this.isbn = this.$.formlineisbn.value;
+        this.title = this.$.formlinetitle.getInputValue();
+        this.author = this.$.formlineauthor.getInputValue();
+        this.isbn = this.$.formlineisbn.getInputValue();
 
         this.$.requestBooks.generateRequest();
 
