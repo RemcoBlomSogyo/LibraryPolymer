@@ -1,4 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <dom-module id="book-info">
   <template>
@@ -7,27 +9,168 @@
       #containerMessage {
         color: red;
       }
+
+      paper-button {
+        color: white;
+        background-color: #007936;
+      }
+
+      #copiesAvailableContainer {
+        display: inline;
+      }
     </style>
 
-    <book-form id="book-form" success-message={{messageText}}></book-form>
-    <h3 id="containerMessage"></h3>
+    <!-- <book-table id="booktable"></book-table> -->
+
+    <table>
+      <tr>
+        <th>Titel</th>
+        <td id="title">{{bookInfo.book.title}}</td>
+      </tr>
+      <tr>
+        <th>Subtitel</th>
+        <td id="subtitle">{{bookInfo.book.subtitle}}</td>
+      </tr>
+      <tr>
+        <th>Auteur</th>
+        <td id="author">{{bookInfo.book.authorForename}} {{bookInfo.book.authorSurname}}</td>
+      </tr>
+      <tr>
+        <th>Categorie</th>
+        <td id="category">{{bookInfo.book.category}}</td>
+      </tr>
+      <tr>
+        <th>Uitgever</th>
+        <td id="publisher">{{bookInfo.book.publisher}}</td>
+      </tr>
+      <tr>
+        <th>Publicatiejaar</th>
+        <td id="yearFirstPublication">{{bookInfo.book.yearFirstPublication}}</td>
+      </tr>
+      <tr>
+        <th>ISBN</th>
+        <td id="isbn">{{bookInfo.book.isbn}}</td>
+      </tr>
+      <tr>
+        <th>Bladzijdes</th>
+        <td id="pages">{{bookInfo.book.pages}}</td>
+      </tr>
+      <tr>
+        <th>Taal</th>
+        <td id="language">{{bookInfo.book.language}}</td>
+      </tr>
+    </table>
+
+    <h4 id="copiesAvailableContainer">Beschikbaar: <span id="copiesavailable">{{bookInfo.copiesAvailable}}</span></h4>
+    <paper-button raised id="plus-button" on-tap="addCopy">+</paper-button>
+    <paper-button raised id="minus-button" on-tap="deleteCopy">-</paper-button>
+    <h4>Uitgeleend: 0</h4>
+
+    <paper-button raised id="delete-book-button" on-tap="deleteCopy">Verwijder boek</paper-button>
+
+    <h4 id="containerMessage"></h4>
+
+    <iron-ajax
+      id="requestBookInfo"
+      url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId.bookId}}"
+      handle-as="json"
+      on-response="handleBookResponse">
+    </iron-ajax>
+
+    <iron-ajax
+      id="addCopy"
+      url="http://localhost:9999/SogyoLibrary/rest/copy"
+      content-type="application/json"
+      method="POST"
+      body={{bookId}}
+      handle-as="json"
+      on-response="handleCopyResponse">
+    </iron-ajax>
+
+    <iron-ajax
+      id="deleteCopy"
+      url="http://localhost:9999/SogyoLibrary/rest/copy"
+      content-type="application/json"
+      method="DELETE"
+      body={{bookId}}
+      handle-as="json"
+      on-response="handleCopyResponse">
+    </iron-ajax>
   </template>
 
   <script>
     Polymer({
       is: "book-info",
       properties: {
-        messageText: {
-          type: Object,
-          observer: "showMessage"
+        // bookId: Number,
+        bookId: Object,
+        // bookIdJson: Object,
+        bookInfo: {
+          type: Object
+          // observer: "setBookData"
+        }
+        // copiesAvailable: {
+        //   type: Number,
+        //   value: 0
+        // }
+      },
+      ready: function() {
+        console.log("ready");
+        var url = document.location.href;
+        var urlParts = url.split('/');
+        this.bookId = {bookId: urlParts.pop()};
+        console.log(this.bookId);
+        this.$.requestBookInfo.generateRequest();
+      },
+
+      handleBookResponse: function(data) {
+        console.log("data ontvangen");
+        this.bookInfo = data.detail.response;
+      },
+
+      handleCopyResponse: function(data) {
+        var copyMessage = data.detail.response;
+        if (copyMessage.commandSucceeded) {
+          this.bookInfo.copiesAvailable = copyMessage.copiesOfBook;
+          this.$.copiesavailable.innerHTML = copyMessage.copiesOfBook;
+        } else {
+          this.$.containerMessage.innerHTML = copyMessage.message;
         }
       },
 
-      showMessage: function() {
-        console.log("data ontvangen");
-        this.$.containerMessage.innerHTML = this.messageText.message;
+      // setBookData: function() {
+      //   console.log("setBookData");
+      //   this.$.title.innerHTML = this.bookInfo.book.title;
+      //   this.$.subtitle.innerHTML = this.bookInfo.book.subtitle;
+      //   this.$.author.innerHTML = this.bookInfo.book.authorForename + " " + this.bookInfo.book.authorSurname;
+      //   this.$.category.innerHTML = this.bookInfo.book.category;
+      //   this.$.publisher.innerHTML = this.bookInfo.book.publisher;
+      //   this.$.yearFirstPublication.innerHTML = this.bookInfo.book.yearFirstPublication;
+      //   this.$.isbn.innerHTML = this.bookInfo.book.isbn;
+      //   this.$.pages.innerHTML = this.bookInfo.book.pages;
+      //   // this.$.language.innerHTML = this.bookInfo.book.language;
+      //   // this.$.copiesAvailable.innerHTML = this.bookInfo.copiesAvailable;
+      // },
+
+      addCopy: function() {
+        // this.copiesAvailable++;
+        console.log(this.bookId);
+        // this.bookIdJson = {bookId: this.bookId};
+        // console.log(this.bookIdJson);
+        this.$.addCopy.generateRequest();
+      },
+
+      deleteCopy: function() {
+        console.log("deleteCopy");
+        if (this.bookInfo.copiesAvailable > 0) {
+          // this.copiesAvailable--;
+          this.$.deleteCopy.generateRequest();
+        }
       }
 
+      deleteBook: function() {
+        this.$.deleteBook.generateRequest();
+      }
     });
   </script>
 </dom-module>
