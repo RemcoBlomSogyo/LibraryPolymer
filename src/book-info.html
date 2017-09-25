@@ -66,7 +66,7 @@
     <paper-button raised id="minus-button" on-tap="deleteCopy">-</paper-button>
     <h4>Uitgeleend: 0</h4>
 
-    <paper-button raised id="delete-book-button" on-tap="deleteCopy">Verwijder boek</paper-button>
+    <paper-button raised id="delete-book-button" on-tap="deleteBook">Verwijder boek</paper-button>
 
     <h4 id="containerMessage"></h4>
 
@@ -74,7 +74,7 @@
       id="requestBookInfo"
       url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId.bookId}}"
       handle-as="json"
-      on-response="handleBookResponse">
+      on-response="handleBookInfoResponse">
     </iron-ajax>
 
     <iron-ajax
@@ -95,6 +95,16 @@
       body={{bookId}}
       handle-as="json"
       on-response="handleCopyResponse">
+    </iron-ajax>
+
+    <iron-ajax
+      id="deleteBook"
+      url="http://localhost:9999/SogyoLibrary/rest/book"
+      content-type="application/json"
+      method="DELETE"
+      body={{bookId}}
+      handle-as="json"
+      on-response="handleDeleteBookResponse">
     </iron-ajax>
   </template>
 
@@ -123,7 +133,7 @@
         this.$.requestBookInfo.generateRequest();
       },
 
-      handleBookResponse: function(data) {
+      handleBookInfoResponse: function(data) {
         console.log("data ontvangen");
         this.bookInfo = data.detail.response;
       },
@@ -135,6 +145,15 @@
           this.$.copiesavailable.innerHTML = copyMessage.copiesOfBook;
         } else {
           this.$.containerMessage.innerHTML = copyMessage.message;
+        }
+      },
+
+      handleDeleteBookResponse: function(data) {
+        var deleteBookMessage = data.detail.response;
+        if (deleteBookMessage.commandSucceeded) {
+          window.location.href = "search-book/deletesuccessful";
+        } else {
+          this.$.containerMessage.innerHTML = deleteBookMessage.message;
         }
       },
 
@@ -166,7 +185,7 @@
           // this.copiesAvailable--;
           this.$.deleteCopy.generateRequest();
         }
-      }
+      },
 
       deleteBook: function() {
         this.$.deleteBook.generateRequest();

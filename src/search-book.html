@@ -6,9 +6,12 @@
   <template>
 
     <style>
-
+      #containerMessage {
+        color: green;
+      }
     </style>
 
+    <h3 id="containerMessage"></h3>
     <search-form id="search-form" results={{searchResults}}></search-form>
     <scrollable-list id="scrollableList"></scrollable-list>
   </template>
@@ -20,6 +23,13 @@
         searchResults: {
           type: Array,
           observer: "setResultsInList"
+        }
+      },
+      ready: function() {
+        var url = document.location.href;
+        var urlParts = url.split('/');
+        if (urlParts.pop() === "deletesuccessful") {
+          this.$.containerMessage.innerHTML = "Boek en exemplaren succesvol verwijderd";
         }
       },
 
