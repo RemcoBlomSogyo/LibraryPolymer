@@ -1,0 +1,60 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="book-form.html">
+
+<dom-module id="edit-book">
+  <template>
+
+    <style>
+      #containerMessage {
+        color: red;
+      }
+    </style>
+
+    <iron-ajax
+      id="requestBookInfo"
+      url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}"
+      handle-as="json"
+      on-response="handleBookInfoResponse">
+    </iron-ajax>
+
+    <book-form id="book-form" add-edit-book-message={{editBookMessage}} book-form-input={{bookFormInput}} button-text="Wijzigen"></book-form>
+    <h3 id="containerMessage"></h3>
+  </template>
+
+  <script>
+    Polymer({
+      is: "edit-book",
+      properties: {
+        bookId: Number,
+        bookFormInput: Object,
+        editBookMessage: {
+          type: Object,
+          observer: "handleMessage"
+        }
+      },
+
+      ready: function() {
+        var url = document.location.href;
+        var urlParts = url.split('/');
+        this.bookId = urlParts.pop();
+        this.$.requestBookInfo.generateRequest();
+      },
+
+      handleBookInfoResponse: function(data) {
+        var bookInfo = data.detail.response;
+        this.bookFormInput = bookInfo.book;
+        console.log("handleBookInfoResponse");
+      },
+
+      handleMessage: function() {
+        console.log("data ontvangen");
+        if (this.editBookMessage.commandSucceeded) {
+          window.location.href = "book-info/" + this.bookId + "/editsuccessful";
+        } else {
+          this.$.containerMessage.innerHTML = this.editBookMessage.message;
+        }
+      }
+
+    });
+  </script>
+</dom-module>

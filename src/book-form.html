@@ -25,12 +25,12 @@
         display: inline-block;
       }
 
-      #add-button {
+      #addEditButton {
         background-color: rgb(107, 107, 107);
         float: right;
       }
 
-      #add-button:hover {
+      #addEditButton:hover {
         background-color: #479C5E;
       }
 
@@ -41,7 +41,17 @@
       url="http://localhost:9999/SogyoLibrary/rest/book"
       content-type="application/json"
       method="POST"
-      body={{bookInformation}}
+      body={{bookFormInput}}
+      handle-as="json"
+      on-response="handleResponse">
+    </iron-ajax>
+
+    <iron-ajax
+      id="editBook"
+      url="http://localhost:9999/SogyoLibrary/rest/book"
+      content-type="application/json"
+      method="PUT"
+      body={{bookFormInput}}
       handle-as="json"
       on-response="handleResponse">
     </iron-ajax>
@@ -61,12 +71,12 @@
       <form-line id="formLineCategory" name="Categorie *"></form-line>
       <form-line id="formLinePublisher" name="Uitgever *"></form-line>
       <form-line id="formLineYearFirstPublication" name="Publicatiejaar"></form-line>
-      <form-line id="formLineISBN" name="ISBN *"></form-line>
+      <form-line id="formLineIsbn" name="ISBN *"></form-line>
       <form-line id="formLinePages" name="Bladzijdes"></form-line>
       <form-line id="formLineLanguage" name="Taal"></form-line>
       <p>* verplicht veld</p>
 
-      <paper-button raised id="add-button" on-tap="getFormInput">Toevoegen</paper-button>
+      <paper-button raised id="addEditButton" on-tap="getFormInput">[[buttonText]]</paper-button>
     </div>
 
   </template>
@@ -75,15 +85,28 @@
     Polymer({
       is: "book-form",
       properties: {
-        bookInformation: Object,
-        successMessage: {
+        bookFormInput: {
+          type: Object,
+          observer: "setObjectInForm"
+        },
+        addEditBookMessage: {
           type: Object,
           notify: true
-        }
+        },
+        buttonText: String
       },
 
       getFormInput: function() {
-        this.bookInformation = {
+        var url = document.location.href;
+        var urlParts = url.split('/');
+        var lastUrlPart = urlParts.pop();
+        console.log(lastUrlPart);
+        console.log(typeof lastUrlPart);
+        if (!/^\d+$/.test(lastUrlPart)) {
+          lastUrlPart = 0;
+        }
+        this.bookFormInput = {
+          id: lastUrlPart,
           title: this.$.formLineTitle.getInputValue(),
           subtitle: this.$.formLineSubtitle.getInputValue(),
           authorForename: this.$.formLineAuthorForename.getInputValue(),
@@ -91,41 +114,46 @@
           category: this.$.formLineCategory.getInputValue(),
           publisher: this.$.formLinePublisher.getInputValue(),
           yearFirstPublication: this.$.formLineYearFirstPublication.getInputValue(),
-          isbn: this.$.formLineISBN.getInputValue(),
+          isbn: this.$.formLineIsbn.getInputValue(),
           pages: this.$.formLinePages.getInputValue(),
           language: this.$.formLineLanguage.getInputValue()
         };
+        console.log(this.bookFormInput.id);
         this.validateInput();
       },
 
       handleResponse: function(data) {
-        this.successMessage = data.detail.response;
+        this.addEditBookMessage = data.detail.response;
       },
 
       validateInput: function() {
         var validateMessage = {commandSucceeded: false, message: ""};
-        if (this.bookInformation.title === "") {
+        if (this.bookFormInput.title === "") {
           validateMessage.message = "Vul een titel in";
-        } else if (this.bookInformation.authorForename === "") {
+        } else if (this.bookFormInput.authorForename === "") {
           validateMessage.message = "Vul een voornaam in";
-        } else if (this.bookInformation.authorSurname === "") {
+        } else if (this.bookFormInput.authorSurname === "") {
           validateMessage.message = "Vul een achternaam in";
-        } else if (this.bookInformation.category === "") {
+        } else if (this.bookFormInput.category === "") {
           validateMessage.message = "Vul een categorie in";
-        } else if (this.bookInformation.publisher === "") {
+        } else if (this.bookFormInput.publisher === "") {
           validateMessage.message = "Vul een uitgever in";
-        } else if (this.bookInformation.isbn === "") {
+        } else if (this.bookFormInput.isbn === "") {
           validateMessage.message = "Vul een ISBN in";
-        } else if (this.isbnIsNotValid(this.bookInformation.isbn)) {
+        } else if (this.isbnIsNotValid(this.bookFormInput.isbn)) {
           validateMessage.message = "Opgegeven ISBN is onjuist";
         } else {
           validateMessage.commandSucceeded = true;
         }
 
         if (validateMessage.commandSucceeded) {
-          this.$.addBook.generateRequest();
+          if (this.buttonText === "Toevoegen") {
+            this.$.addBook.generateRequest();
+          } else {
+            this.$.editBook.generateRequest();
+          }
         } else {
-          this.successMessage = validateMessage;
+          this.addEditBookMessage = validateMessage;
         }
       },
 
@@ -155,6 +183,19 @@
         }
 
         return checkDigit;
+      },
+
+      setObjectInForm: function() {
+        this.$.formLineTitle.inputValue = this.bookFormInput.title;
+        this.$.formLineSubtitle.inputValue = this.bookFormInput.subtitle;
+        this.$.formLineAuthorForename.inputValue = this.bookFormInput.authorForename;
+        this.$.formLineAuthorSurname.inputValue = this.bookFormInput.authorSurname;
+        this.$.formLineCategory.inputValue = this.bookFormInput.category;
+        this.$.formLinePublisher.inputValue = this.bookFormInput.publisher;
+        this.$.formLineYearFirstPublication.inputValue = this.bookFormInput.yearFirstPublication;
+        this.$.formLineIsbn.inputValue = this.bookFormInput.isbn;
+        this.$.formLinePages.inputValue = this.bookFormInput.pages;
+        this.$.formLineLanguage.inputValue = this.bookFormInput.language;
       }
     });
   </script>

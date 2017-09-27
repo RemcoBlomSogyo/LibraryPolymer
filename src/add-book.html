@@ -10,7 +10,7 @@
       }
     </style>
 
-    <book-form id="book-form" success-message={{messageText}}></book-form>
+    <book-form id="book-form" add-edit-book-message={{addBookMessage}} button-text="Toevoegen"></book-form>
     <h3 id="containerMessage"></h3>
   </template>
 
@@ -18,15 +18,19 @@
     Polymer({
       is: "add-book",
       properties: {
-        messageText: {
+        addBookMessage: {
           type: Object,
-          observer: "showMessage"
+          observer: "handleMessage"
         }
       },
 
-      showMessage: function() {
+      handleMessage: function() {
         console.log("data ontvangen");
-        this.$.containerMessage.innerHTML = this.messageText.message;
+        if (this.addBookMessage.commandSucceeded) {
+          window.location.href = "book-info/" + this.addBookMessage.bookId + "/addsuccessful";
+        } else {
+          this.$.containerMessage.innerHTML = this.addBookMessage.message;
+        }
       }
 
     });
