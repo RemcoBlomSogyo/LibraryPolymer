@@ -20,8 +20,6 @@
       }
     </style>
 
-    <!-- <book-table id="booktable"></book-table> -->
-
     <table>
       <tr>
         <th>Titel</th>
@@ -113,24 +111,14 @@
     Polymer({
       is: "book-info",
       properties: {
-        // bookId: Number,
         bookId: Object,
-        // bookIdJson: Object,
-        bookInfo: {
-          type: Object
-          // observer: "setBookData"
-        }
-        // copiesAvailable: {
-        //   type: Number,
-        //   value: 0
-        // }
+        bookInfo: Object
       },
+
       ready: function() {
-        console.log("ready");
         var url = document.location.href;
         var urlParts = url.split('/');
         var lastUrlPart = urlParts.pop();
-        console.log(lastUrlPart);
         if (lastUrlPart === "addsuccessful") {
           this.$.containerMessage.innerHTML = "Boek succesvol toegevoegd";
           this.bookId = {bookId: urlParts.pop()};
@@ -140,12 +128,10 @@
         } else {
           this.bookId = {bookId: lastUrlPart};
         }
-        console.log(this.bookId);
         this.$.requestBookInfo.generateRequest();
       },
 
       handleBookInfoResponse: function(data) {
-        console.log("data ontvangen");
         this.bookInfo = data.detail.response;
       },
 
@@ -167,32 +153,12 @@
         }
       },
 
-      // setBookData: function() {
-      //   console.log("setBookData");
-      //   this.$.title.innerHTML = this.bookInfo.book.title;
-      //   this.$.subtitle.innerHTML = this.bookInfo.book.subtitle;
-      //   this.$.author.innerHTML = this.bookInfo.book.authorForename + " " + this.bookInfo.book.authorSurname;
-      //   this.$.category.innerHTML = this.bookInfo.book.category;
-      //   this.$.publisher.innerHTML = this.bookInfo.book.publisher;
-      //   this.$.yearFirstPublication.innerHTML = this.bookInfo.book.yearFirstPublication;
-      //   this.$.isbn.innerHTML = this.bookInfo.book.isbn;
-      //   this.$.pages.innerHTML = this.bookInfo.book.pages;
-      //   // this.$.language.innerHTML = this.bookInfo.book.language;
-      //   // this.$.copiesAvailable.innerHTML = this.bookInfo.copiesAvailable;
-      // },
-
       addCopy: function() {
-        // this.copiesAvailable++;
-        console.log(this.bookId);
-        // this.bookIdJson = {bookId: this.bookId};
-        // console.log(this.bookIdJson);
         this.$.addCopy.generateRequest();
       },
 
       deleteCopy: function() {
-        console.log("deleteCopy");
         if (this.bookInfo.copiesAvailable > 0) {
-          // this.copiesAvailable--;
           this.$.deleteCopy.generateRequest();
         }
       },

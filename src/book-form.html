@@ -8,7 +8,6 @@
   <template>
 
     <style>
-
       * {
         font-family: 'Roboto', sans-serif;
         color: white;
@@ -33,7 +32,6 @@
       #addEditButton:hover {
         background-color: #479C5E;
       }
-
     </style>
 
     <iron-ajax
@@ -55,13 +53,6 @@
       handle-as="json"
       on-response="handleResponse">
     </iron-ajax>
-
-    <!-- <iron-ajax
-      id="addBook"
-      url="http://localhost:9999/SogyoLibrary/rest/book/add"
-      handle-as="json"
-      on-response="handleResponse">
-    </iron-ajax> -->
 
     <div id="container">
       <form-line id="formLineTitle" name="Titel *"></form-line>
@@ -100,8 +91,6 @@
         var url = document.location.href;
         var urlParts = url.split('/');
         var lastUrlPart = urlParts.pop();
-        console.log(lastUrlPart);
-        console.log(typeof lastUrlPart);
         if (!/^\d+$/.test(lastUrlPart)) {
           lastUrlPart = 0;
         }
@@ -118,7 +107,6 @@
           pages: this.$.formLinePages.getInputValue(),
           language: this.$.formLineLanguage.getInputValue()
         };
-        console.log(this.bookFormInput.id);
         this.validateInput();
       },
 
@@ -181,7 +169,6 @@
         if (checkDigit == 10) {
           checkDigit = 0;
         }
-
         return checkDigit;
       },
 

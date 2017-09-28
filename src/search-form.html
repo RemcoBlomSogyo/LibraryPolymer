@@ -8,7 +8,6 @@
   <template>
 
     <style>
-
       #container {
         width: 280px;
         height: 200px;
@@ -26,7 +25,6 @@
       #search-button:hover {
         background-color: #479C5E;
       }
-
     </style>
 
     <iron-ajax
@@ -62,26 +60,13 @@
         this.title = this.$.formlinetitle.getInputValue();
         this.author = this.$.formlineauthor.getInputValue();
         this.isbn = this.$.formlineisbn.getInputValue();
-
         this.$.requestBooks.generateRequest();
-
-        console.log(typeof this.results);
-        console.log(this.results);
-        /*window.location.href = "/SogyoLibrary/search"*/
-
       },
 
       handleResponse: function(data) {
         this.results = data.detail.response;
-        console.log("handleResponse");
       }
     });
-
-    /*class SearchForm extends Polymer.Element {
-      static get is() { return 'search-form'; }
-    }
-
-    window.customElements.define(SearchForm.is, SearchForm);*/
   </script>
 
 </dom-module>

@@ -43,11 +43,9 @@
       handleBookInfoResponse: function(data) {
         var bookInfo = data.detail.response;
         this.bookFormInput = bookInfo.book;
-        console.log("handleBookInfoResponse");
       },
 
       handleMessage: function() {
-        console.log("data ontvangen");
         if (this.editBookMessage.commandSucceeded) {
           window.location.href = "book-info/" + this.bookId + "/editsuccessful";
         } else {
