@@ -5,14 +5,14 @@
 
     <style>
       li {
-        height: 80px;
+        height: 100px;
         border: 1px solid #bbc3cc;
         list-style-type: none;
       }
 
-      #book-image {
+      #bookImage {
 				width: 70px;
-				height: 80px;
+				height: 100px;
         object-fit: cover;
 				display: inline-block;
 				float: left;
@@ -22,28 +22,28 @@
         display: inline-block;
       }
 
-      #title-author {
+      #titleAuthor {
         float: left;
       }
 
-      #category-isbn {
+      #categoryIsbn {
         float: right;
       }
 
-      .list-item-text {
+      .listItemText {
         margin: 0;
       }
     </style>
 
     <li>
-      <img id="book-image"></img>
-      <div id="title-author">
-        <h3 class="list-item-text" id="book-title">[[title]]</h3>
-        <h4 class="list-item-text" id="book-author">[[author]]</h4>
+      <img id="bookImage"></img>
+      <div id="titleAuthor">
+        <h3 class="listItemText" id="bookTitle">[[title]]</h3>
+        <h4 class="listItemText" id="bookAuthors"></h4>
       </div>
-      <div id="category-isbn">
-        <p class="list-item-text" id="copies-available">Categorie: <span>[[category]]</span></p>
-        <p class="list-item-text" id="copies-existing">ISBN: <span>[[isbn]]</span></p>
+      <div id="categoryIsbn">
+        <p class="listItemText" id="copiesAvailable">Categorie: <span>[[category]]</span></p>
+        <p class="listItemText" id="copiesExisting">ISBN: <span>[[isbn]]</span></p>
       </div>
     </li>
 
@@ -55,9 +55,24 @@
       properties: {
         id: Number,
         title: String,
-        author: String,
+        authors: {
+          type: Array,
+          observer: "addExtraAuthors"
+        },
         category: String,
         isbn: String
+      },
+
+      addExtraAuthors: function() {
+        this.$.bookAuthors.innerHTML = (this.authors[0].forename + " " + this.authors[0].surname);
+
+        if (this.authors.length >= 2) {
+          this.$.bookAuthors.innerHTML += ("<br/>" + this.authors[1].forename + " " + this.authors[1].surname);
+        }
+
+        if (this.authors.length === 3) {
+          this.$.bookAuthors.innerHTML += ("<br/>" + this.authors[2].forename + " " + this.authors[2].surname);
+        }
       }
     });
   </script>

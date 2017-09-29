@@ -42,7 +42,40 @@
 
       handleBookInfoResponse: function(data) {
         var bookInfo = data.detail.response;
-        this.bookFormInput = bookInfo.book;
+
+        // this.bookFormInput = bookInfo.book;
+
+        var authorForename2Text = "";
+        var authorSurname2Text = "";
+        var authorForename3Text = "";
+        var authorSurname3Text = "";
+
+        if (bookInfo.book.authors.length >= 2) {
+          authorForename2Text = bookInfo.book.authors[1].forename;
+          authorSurname2Text = bookInfo.book.authors[1].surname;
+        }
+
+        if (bookInfo.book.authors.length === 3) {
+          authorForename3Text = bookInfo.book.authors[2].forename;
+          authorSurname3Text = bookInfo.book.authors[2].surname;
+        }
+
+        this.bookFormInput = {
+          title: bookInfo.book.title,
+          subtitle: bookInfo.book.subtitle,
+          authorForename1: bookInfo.book.authors[0].forename,
+          authorSurname1: bookInfo.book.authors[0].surname,
+          authorForename2: authorForename2Text,
+          authorSurname2: authorSurname2Text,
+          authorForename3: authorForename3Text,
+          authorSurname3: authorSurname3Text,
+          category: bookInfo.book.category,
+          publisher: bookInfo.book.publisher,
+          yearFirstPublication: bookInfo.book.yearFirstPublication,
+          isbn: bookInfo.book.isbn,
+          pages: bookInfo.book.pages,
+          language: bookInfo.book.language
+        }
       },
 
       handleMessage: function() {

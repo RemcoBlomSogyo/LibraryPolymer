@@ -30,8 +30,8 @@
         <td id="subtitle">{{bookInfo.book.subtitle}}</td>
       </tr>
       <tr>
-        <th>Auteur</th>
-        <td id="author">{{bookInfo.book.authorForename}} {{bookInfo.book.authorSurname}}</td>
+        <th id="authorsTitle">Auteur</th>
+        <td id="authors">{{bookInfo.book.authorForename}} {{bookInfo.book.authorSurname}}</td>
       </tr>
       <tr>
         <th>Categorie</th>
@@ -133,6 +133,16 @@
 
       handleBookInfoResponse: function(data) {
         this.bookInfo = data.detail.response;
+        this.$.authors.innerHTML = (this.bookInfo.book.authors[0].forename + " " + this.bookInfo.book.authors[0].surname);
+
+        if (this.bookInfo.book.authors.length >= 2) {
+          this.$.authorsTitle.innerHTML += "s";
+          this.$.authors.innerHTML += (", " + this.bookInfo.book.authors[1].forename + " " + this.bookInfo.book.authors[1].surname);
+        }
+
+        if (this.bookInfo.book.authors.length === 3) {
+          this.$.authors.innerHTML += (", " + this.bookInfo.book.authors[2].forename + " " + this.bookInfo.book.authors[2].surname);
+        }
       },
 
       handleCopyResponse: function(data) {
