@@ -100,6 +100,10 @@
           type: Object,
           observer: "setObjectInForm"
         },
+        observerOn: {
+          type: Boolean,
+          value: true
+        },
         addEditBookMessage: {
           type: Object,
           notify: true
@@ -133,38 +137,39 @@
       },
 
       addAuthorFormLine: function() {
-          if (this.authorsVisible === 1) {
-            this.$.container.style.height = this.containerHeight2;
-            this.$.formLineAuthorForename2.style.display = "block";
-            this.$.formLineAuthorSurname2.style.display = "block";
-            this.authorsVisible = 2;
-          } else if (this.authorsVisible = 2) {
-            this.$.container.style.height = this.containerHeight3;
-            this.$.formLineAuthorForename3.style.display = "block";
-            this.$.formLineAuthorSurname3.style.display = "block";
-            this.$.addAuthorButton.style.visibility = "hidden";
-            this.authorsVisible = 3;
-          }
-          this.$.deleteAuthorButton.style.visibility = "visible";
+        if (this.authorsVisible === 1) {
+          this.$.container.style.height = this.containerHeight2;
+          this.$.formLineAuthorForename2.style.display = "block";
+          this.$.formLineAuthorSurname2.style.display = "block";
+          this.authorsVisible = 2;
+        } else if (this.authorsVisible === 2) {
+          this.$.container.style.height = this.containerHeight3;
+          this.$.formLineAuthorForename3.style.display = "block";
+          this.$.formLineAuthorSurname3.style.display = "block";
+          this.$.addAuthorButton.style.visibility = "hidden";
+          this.authorsVisible = 3;
+        }
+        this.$.deleteAuthorButton.style.visibility = "visible";
       },
 
       deleteAuthorFormLine: function() {
-          if (this.authorsVisible === 2) {
-            this.$.container.style.height = this.containerHeight1;
-            this.$.formLineAuthorForename2.style.display = "none";
-            this.$.formLineAuthorSurname2.style.display = "none";
-            this.$.deleteAuthorButton.style.visibility = "hidden";
-            this.authorsVisible = 1;
-          } else if (this.authorsVisible = 3) {
-            this.$.container.style.height = this.containerHeight2;
-            this.$.formLineAuthorForename3.style.display = "none";
-            this.$.formLineAuthorSurname3.style.display = "none";
-            this.authorsVisible = 2;
-          }
-          this.$.addAuthorButton.style.visibility = "visible";
+        if (this.authorsVisible === 2) {
+          this.$.container.style.height = this.containerHeight1;
+          this.$.formLineAuthorForename2.style.display = "none";
+          this.$.formLineAuthorSurname2.style.display = "none";
+          this.$.deleteAuthorButton.style.visibility = "hidden";
+          this.authorsVisible = 1;
+        } else if (this.authorsVisible === 3) {
+          this.$.container.style.height = this.containerHeight2;
+          this.$.formLineAuthorForename3.style.display = "none";
+          this.$.formLineAuthorSurname3.style.display = "none";
+          this.authorsVisible = 2;
+        }
+        this.$.addAuthorButton.style.visibility = "visible";
       },
 
       getFormInput: function() {
+        this.observerOn = false;
         var url = document.location.href;
         var urlParts = url.split('/');
         var lastUrlPart = urlParts.pop();
@@ -254,28 +259,29 @@
       },
 
       setObjectInForm: function() {
-        console.log(this.bookFormInput);
-        this.$.formLineTitle.inputValue = this.bookFormInput.title;
-        this.$.formLineSubtitle.inputValue = this.bookFormInput.subtitle;
-        this.$.formLineAuthorForename1.inputValue = this.bookFormInput.authorForename1;
-        this.$.formLineAuthorSurname1.inputValue = this.bookFormInput.authorSurname1;
-        this.$.formLineAuthorForename2.inputValue = this.bookFormInput.authorForename2;
-        this.$.formLineAuthorSurname2.inputValue = this.bookFormInput.authorSurname2;
-        this.$.formLineAuthorForename3.inputValue = this.bookFormInput.authorForename3;
-        this.$.formLineAuthorSurname3.inputValue = this.bookFormInput.authorSurname3;
-        this.$.formLineCategory.inputValue = this.bookFormInput.category;
-        this.$.formLinePublisher.inputValue = this.bookFormInput.publisher;
-        this.$.formLineYearFirstPublication.inputValue = this.bookFormInput.yearFirstPublication;
-        this.$.formLineIsbn.inputValue = this.bookFormInput.isbn;
-        this.$.formLinePages.inputValue = this.bookFormInput.pages;
-        this.$.formLineLanguage.inputValue = this.bookFormInput.language;
+        if (this.observerOn) {
+          this.$.formLineTitle.inputValue = this.bookFormInput.title;
+          this.$.formLineSubtitle.inputValue = this.bookFormInput.subtitle;
+          this.$.formLineAuthorForename1.inputValue = this.bookFormInput.authorForename1;
+          this.$.formLineAuthorSurname1.inputValue = this.bookFormInput.authorSurname1;
+          this.$.formLineAuthorForename2.inputValue = this.bookFormInput.authorForename2;
+          this.$.formLineAuthorSurname2.inputValue = this.bookFormInput.authorSurname2;
+          this.$.formLineAuthorForename3.inputValue = this.bookFormInput.authorForename3;
+          this.$.formLineAuthorSurname3.inputValue = this.bookFormInput.authorSurname3;
+          this.$.formLineCategory.inputValue = this.bookFormInput.category;
+          this.$.formLinePublisher.inputValue = this.bookFormInput.publisher;
+          this.$.formLineYearFirstPublication.inputValue = this.bookFormInput.yearFirstPublication;
+          this.$.formLineIsbn.inputValue = this.bookFormInput.isbn;
+          this.$.formLinePages.inputValue = this.bookFormInput.pages;
+          this.$.formLineLanguage.inputValue = this.bookFormInput.language;
 
-        if (this.bookFormInput.authorForename2 !== "") {
-          this.addAuthorFormLine();
-        }
+          if (this.bookFormInput.authorForename2 !== "") {
+            this.addAuthorFormLine();
+          }
 
-        if (this.bookFormInput.authorForename3 !== "") {
-          this.addAuthorFormLine();
+          if (this.bookFormInput.authorForename3 !== "") {
+            this.addAuthorFormLine();
+          }
         }
       }
     });
