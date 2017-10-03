@@ -71,37 +71,34 @@
 
     <iron-ajax
       id="requestBookInfo"
-      url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId.bookId}}"
+      url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}"
       handle-as="json"
       on-response="handleBookInfoResponse">
     </iron-ajax>
 
     <iron-ajax
       id="addCopy"
-      url="http://localhost:9999/SogyoLibrary/rest/copy"
+      url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}/copy"
       content-type="application/json"
       method="POST"
-      body={{bookId}}
       handle-as="json"
       on-response="handleCopyResponse">
     </iron-ajax>
 
     <iron-ajax
       id="deleteCopy"
-      url="http://localhost:9999/SogyoLibrary/rest/copy"
+      url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}/copy"
       content-type="application/json"
       method="DELETE"
-      body={{bookId}}
       handle-as="json"
       on-response="handleCopyResponse">
     </iron-ajax>
 
     <iron-ajax
       id="deleteBook"
-      url="http://localhost:9999/SogyoLibrary/rest/book"
+      url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}"
       content-type="application/json"
       method="DELETE"
-      body={{bookId}}
       handle-as="json"
       on-response="handleDeleteBookResponse">
     </iron-ajax>
@@ -111,7 +108,7 @@
     Polymer({
       is: "book-info",
       properties: {
-        bookId: Object,
+        bookId: Number,
         bookInfo: Object
       },
 
@@ -121,12 +118,12 @@
         var lastUrlPart = urlParts.pop();
         if (lastUrlPart === "addsuccessful") {
           this.$.containerMessage.innerHTML = "Boek succesvol toegevoegd";
-          this.bookId = {bookId: urlParts.pop()};
+          this.bookId = urlParts.pop();
         } else if (lastUrlPart === "editsuccessful") {
           this.$.containerMessage.innerHTML = "Boek succesvol aangepast";
-          this.bookId = {bookId: urlParts.pop()};
+          this.bookId = urlParts.pop();
         } else {
-          this.bookId = {bookId: lastUrlPart};
+          this.bookId = lastUrlPart;
         }
         this.$.requestBookInfo.generateRequest();
       },
@@ -174,7 +171,7 @@
       },
 
       goToEditBook: function() {
-        window.location.href = "edit-book/" + this.bookId.bookId;
+        window.location.href = "edit-book/" + this.bookId;
       },
 
       deleteBook: function() {

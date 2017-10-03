@@ -58,7 +58,7 @@
 
     <iron-ajax
       id="editBook"
-      url="http://localhost:9999/SogyoLibrary/rest/book"
+      url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}"
       content-type="application/json"
       method="PUT"
       body={{bookFormInput}}
@@ -96,6 +96,7 @@
     Polymer({
       is: "book-form",
       properties: {
+        bookId: Number,
         bookFormInput: {
           type: Object,
           observer: "setObjectInForm"
@@ -176,8 +177,8 @@
         if (!/^\d+$/.test(lastUrlPart)) {
           lastUrlPart = 0;
         }
+        this.bookId = lastUrlPart;
         this.bookFormInput = {
-          id: lastUrlPart,
           title: this.$.formLineTitle.getInputValue(),
           subtitle: this.$.formLineSubtitle.getInputValue(),
           authorForename1: this.$.formLineAuthorForename1.getInputValue(),
