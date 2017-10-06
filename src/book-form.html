@@ -263,7 +263,8 @@
       },
 
       setObjectInForm: function() {
-        if (this.observerOn) {
+        console.log(arguments);
+        if (oldBook == undefined || oldBook.id != newBook.id) {
           this.$.formLineTitle.inputValue = this.bookFormInput.title;
           this.$.formLineSubtitle.inputValue = this.bookFormInput.subtitle;
           this.$.formLineAuthorForename1.inputValue = this.bookFormInput.authorForename1;
