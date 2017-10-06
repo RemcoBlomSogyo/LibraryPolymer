@@ -69,8 +69,11 @@
     <div id="container">
       <form-line id="formLineTitle" name="Titel *"></form-line>
       <form-line id="formLineSubtitle" name="Subtitel"></form-line>
-      <form-line id="formLineAuthorForename1" name="Auteur voornaam *"></form-line>
-      <form-line id="formLineAuthorSurname1" name="Auteur achternaam *"></form-line>
+
+      <template is="dom-repeat" items=[[auteurs]] as="auteur">
+        <form-line id="formLineAuthorForename1" name="Auteur voornaam *" input-value={{auteur.forename}}></form-line>
+        <form-line id="formLineAuthorSurname1" name="Auteur achternaam *" input-value={{auteur.surname}}></form-line>
+      </template>
       <form-line id="formLineAuthorForename2" class=formLineAuthor2 name="(2) Auteur voornaam"></form-line>
       <form-line id="formLineAuthorSurname2" class=formLineAuthor2 name="(2) Auteur achternaam"></form-line>
       <form-line id="formLineAuthorForename3" class=formLineAuthor3 name="(3) Auteur voornaam"></form-line>
