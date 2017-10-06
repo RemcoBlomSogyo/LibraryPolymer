@@ -24,7 +24,7 @@
     </style>
 
     <div class="form-line-container">
-      <input id=inputField type="text" value={{inputValue::input}}></input>
+      <input id=inputField type="text" value={{inputValue}}></input>
       <p>{{name}}</p>
     </div>
 
@@ -36,10 +36,7 @@
       properties: {
         name: String,
         inputID: String,
-        inputValue: {
-          type: String,
-          notify: true
-        }
+        inputValue: String
       },
 
       getInputValue: function() {
