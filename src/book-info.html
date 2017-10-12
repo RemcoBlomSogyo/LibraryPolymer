@@ -72,6 +72,7 @@
     <iron-ajax
       id="requestBookInfo"
       url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}"
+      method="GET"
       handle-as="json"
       on-response="handleBookInfoResponse">
     </iron-ajax>
@@ -79,7 +80,6 @@
     <iron-ajax
       id="addCopy"
       url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}/copy"
-      content-type="application/json"
       method="POST"
       handle-as="json"
       on-response="handleCopyResponse">
@@ -88,7 +88,6 @@
     <iron-ajax
       id="deleteCopy"
       url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}/copy"
-      content-type="application/json"
       method="DELETE"
       handle-as="json"
       on-response="handleCopyResponse">
@@ -97,7 +96,6 @@
     <iron-ajax
       id="deleteBook"
       url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}"
-      content-type="application/json"
       method="DELETE"
       handle-as="json"
       on-response="handleDeleteBookResponse">

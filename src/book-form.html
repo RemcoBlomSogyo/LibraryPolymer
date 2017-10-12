@@ -2,6 +2,7 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="form-line.html">
+<link rel="import" href="formline-select.html">
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
 <dom-module id="book-form">
@@ -53,7 +54,7 @@
       method="POST"
       body={{bookFormInput}}
       handle-as="json"
-      on-response="handleResponse">
+      on-response="handleMessageResponse">
     </iron-ajax>
 
     <iron-ajax
@@ -63,18 +64,30 @@
       method="PUT"
       body={{bookFormInput}}
       handle-as="json"
-      on-response="handleResponse">
+      on-response="handleMessageResponse">
+    </iron-ajax>
+
+    <iron-ajax
+      id="getAllAuthors"
+      url="http://localhost:9999/SogyoLibrary/rest/authors"
+      method="GET"
+      body={{bookFormInput}}
+      handle-as="json"
+      on-response="handleAuthorsResponse">
     </iron-ajax>
 
     <div id="container">
       <form-line id="formLineTitle" name="Titel *"></form-line>
       <form-line id="formLineSubtitle" name="Subtitel"></form-line>
-      <form-line id="formLineAuthorForename1" name="Auteur voornaam *"></form-line>
+      <formline-select id="formLineAuthor1" name="Auteur *" authors={{authors}}></formline-select>
+      <formline-select id="formLineAuthor2" name="(2) Auteur" authors={{authors}}></formline-select>
+      <formline-select id="formLineAuthor3" name="(3) Auteur" authors={{authors}}></formline-select>
+      <!--<form-line id="formLineAuthorForename1" name="Auteur voornaam *"></form-line>
       <form-line id="formLineAuthorSurname1" name="Auteur achternaam *"></form-line>
       <form-line id="formLineAuthorForename2" class=formLineAuthor2 name="(2) Auteur voornaam"></form-line>
       <form-line id="formLineAuthorSurname2" class=formLineAuthor2 name="(2) Auteur achternaam"></form-line>
       <form-line id="formLineAuthorForename3" class=formLineAuthor3 name="(3) Auteur voornaam"></form-line>
-      <form-line id="formLineAuthorSurname3" class=formLineAuthor3 name="(3) Auteur achternaam"></form-line>
+      <form-line id="formLineAuthorSurname3" class=formLineAuthor3 name="(3) Auteur achternaam"></form-line>-->
       <div id="buttonContainer">
         <paper-button raised id="deleteAuthorButton" class="authorButton" on-tap="deleteAuthorFormLine">-</paper-button>
         <paper-button raised id="addAuthorButton" class="authorButton" on-tap="addAuthorFormLine">+</paper-button>
@@ -110,6 +123,7 @@
           notify: true
         },
         buttonText: String,
+        authors: Array,
         authorsVisible: {
           type: Number,
           value: 1
@@ -130,23 +144,32 @@
 
       ready: function() {
         this.$.container.style.height = this.containerHeight1;
-        this.$.formLineAuthorForename2.style.display = "none";
-        this.$.formLineAuthorSurname2.style.display = "none";
-        this.$.formLineAuthorForename3.style.display = "none";
-        this.$.formLineAuthorSurname3.style.display = "none";
+        // this.$.formLineAuthorForename2.style.display = "none";
+        // this.$.formLineAuthorSurname2.style.display = "none";
+        // this.$.formLineAuthorForename3.style.display = "none";
+        // this.$.formLineAuthorSurname3.style.display = "none";
+
+        this.$.formLineAuthor2.style.display = "none";
+        this.$.formLineAuthor3.style.display = "none";
         this.$.deleteAuthorButton.style.visibility = "hidden";
+
+        this.$.getAllAuthors.generateRequest();
       },
 
       addAuthorFormLine: function() {
         if (this.authorsVisible === 1) {
           this.$.container.style.height = this.containerHeight2;
-          this.$.formLineAuthorForename2.style.display = "block";
-          this.$.formLineAuthorSurname2.style.display = "block";
+          // this.$.formLineAuthorForename2.style.display = "block";
+          // this.$.formLineAuthorSurname2.style.display = "block";
+          this.$.formLineAuthor2.style.display = "block";
+          this.$.formLineAuthor2.style.display = "block";
           this.authorsVisible = 2;
         } else if (this.authorsVisible === 2) {
           this.$.container.style.height = this.containerHeight3;
-          this.$.formLineAuthorForename3.style.display = "block";
-          this.$.formLineAuthorSurname3.style.display = "block";
+          // this.$.formLineAuthorForename3.style.display = "block";
+          // this.$.formLineAuthorSurname3.style.display = "block";
+          this.$.formLineAuthor3.style.display = "block";
+          this.$.formLineAuthor3.style.display = "block";
           this.$.addAuthorButton.style.visibility = "hidden";
           this.authorsVisible = 3;
         }
@@ -156,14 +179,18 @@
       deleteAuthorFormLine: function() {
         if (this.authorsVisible === 2) {
           this.$.container.style.height = this.containerHeight1;
-          this.$.formLineAuthorForename2.style.display = "none";
-          this.$.formLineAuthorSurname2.style.display = "none";
+          // this.$.formLineAuthorForename2.style.display = "none";
+          // this.$.formLineAuthorSurname2.style.display = "none";
+          this.$.formLineAuthor2.style.display = "none";
+          this.$.formLineAuthor2.style.display = "none";
           this.$.deleteAuthorButton.style.visibility = "hidden";
           this.authorsVisible = 1;
         } else if (this.authorsVisible === 3) {
           this.$.container.style.height = this.containerHeight2;
-          this.$.formLineAuthorForename3.style.display = "none";
-          this.$.formLineAuthorSurname3.style.display = "none";
+          // this.$.formLineAuthorForename3.style.display = "none";
+          // this.$.formLineAuthorSurname3.style.display = "none";
+          this.$.formLineAuthor3.style.display = "none";
+          this.$.formLineAuthor3.style.display = "none";
           this.authorsVisible = 2;
         }
         this.$.addAuthorButton.style.visibility = "visible";
@@ -178,15 +205,30 @@
           lastUrlPart = 0;
         }
         this.bookId = lastUrlPart;
+
+        var author1 = this.$.formLineAuthor1.getSelectedValue();
+        var author2 = this.$.formLineAuthor2.getSelectedValue();
+        var author3 = this.$.formLineAuthor3.getSelectedValue();
+
+        author1Names = this._parseNameInTwoNames(author1);
+        author2Names = this._parseNameInTwoNames(author2);
+        author3Names = this._parseNameInTwoNames(author2);
+
         this.bookFormInput = {
           title: this.$.formLineTitle.getInputValue(),
           subtitle: this.$.formLineSubtitle.getInputValue(),
-          authorForename1: this.$.formLineAuthorForename1.getInputValue(),
-          authorSurname1: this.$.formLineAuthorSurname1.getInputValue(),
-          authorForename2: this.$.formLineAuthorForename2.getInputValue(),
-          authorSurname2: this.$.formLineAuthorSurname2.getInputValue(),
-          authorForename3: this.$.formLineAuthorForename3.getInputValue(),
-          authorSurname3: this.$.formLineAuthorSurname3.getInputValue(),
+          // authorForename1: this.$.formLineAuthorForename1.getInputValue(),
+          // authorSurname1: this.$.formLineAuthorSurname1.getInputValue(),
+          // authorForename2: this.$.formLineAuthorForename2.getInputValue(),
+          // authorSurname2: this.$.formLineAuthorSurname2.getInputValue(),
+          // authorForename3: this.$.formLineAuthorForename3.getInputValue(),
+          // authorSurname3: this.$.formLineAuthorSurname3.getInputValue(),
+          authorForename1: author1Names.authorForename,
+          authorSurname1: author1Names.authorSurname,
+          authorForename2: author2Names.authorForename,
+          authorSurname2: author2Names.authorSurname,
+          authorForename3: author3Names.authorForename,
+          authorSurname3: author3Names.authorSurname,
           category: this.$.formLineCategory.getInputValue(),
           publisher: this.$.formLinePublisher.getInputValue(),
           yearFirstPublication: this.$.formLineYearFirstPublication.getInputValue(),
@@ -194,11 +236,34 @@
           pages: this.$.formLinePages.getInputValue(),
           language: this.$.formLineLanguage.getInputValue()
         };
+        console.log(this.bookFormInput);
         this.validateInput();
       },
 
-      handleResponse: function(data) {
+      _parseNameInTwoNames: function(name) {
+        var forename;
+        var surname;
+        if (name === "") {
+          forename = "";
+          surname = "";
+        } else {
+          forename = name.substring(0, name.indexOf(" "));
+          surname = name.substring(name.indexOf(" ") + 1);
+        }
+
+        name = {
+          authorForename: forename,
+          authorSurname: surname
+        };
+        return name;
+      },
+
+      handleMessageResponse: function(data) {
         this.addEditBookMessage = data.detail.response;
+      },
+
+      handleAuthorsResponse: function(data) {
+        this.authors = data.detail.response;
       },
 
       validateInput: function() {

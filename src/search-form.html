@@ -30,6 +30,7 @@
     <iron-ajax
       id="requestBooks"
       url="http://localhost:9999/SogyoLibrary/rest/books?title={{title}}&author={{author}}&isbn={{isbn}}"
+      method="GET"
       handle-as="json"
       on-response="handleResponse">
     </iron-ajax>

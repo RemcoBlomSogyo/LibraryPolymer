@@ -13,6 +13,7 @@
     <iron-ajax
       id="requestBookInfo"
       url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}"
+      method="GET"
       handle-as="json"
       on-response="handleBookInfoResponse">
     </iron-ajax>

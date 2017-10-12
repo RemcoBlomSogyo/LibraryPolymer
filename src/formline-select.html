@@ -1,0 +1,57 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+<dom-module id="formline-select">
+  <template>
+
+    <style>
+      p {
+        font-family: 'Roboto', sans-serif;
+        color: white;
+        display: inline-block;
+        float: right;
+        margin: 0 10px 0 0;
+      }
+
+      select {
+        float: right;
+        width: 200px;
+      }
+
+      .form-line-container {
+        height: 50px;
+      }
+    </style>
+
+    <div class="form-line-container">
+      <select id=selectField>
+        <option value="">(leeg)</option>
+        <template is="dom-repeat" items="[[authors]]">
+          <option value="{{item.forename}} {{item.surname}}">{{item.forename}} {{item.surname}}</option>
+        </template>
+      </select>
+      <p>{{name}}</p>
+
+      <paper-toggle-button></paper-toggle-button>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: "formline-select",
+      properties: {
+        name: String,
+        inputID: String,
+        authors: Array
+      },
+
+      getSelectedValue: function() {
+        var selectField = this.$.selectField;
+        return selectField.options[selectField.selectedIndex].value;
+      }
+    });
+  </script>
+
+</dom-module>
