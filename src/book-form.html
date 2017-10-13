@@ -206,9 +206,9 @@
         }
         this.bookId = lastUrlPart;
 
-        var author1 = this.$.formLineAuthor1.getSelectedValue();
-        var author2 = this.$.formLineAuthor2.getSelectedValue();
-        var author3 = this.$.formLineAuthor3.getSelectedValue();
+        var author1 = this.$.formLineAuthor1.getAuthorValue();
+        var author2 = this.$.formLineAuthor2.getAuthorValue();
+        var author3 = this.$.formLineAuthor3.getAuthorValue();
 
         author1Names = this._parseNameInTwoNames(author1);
         author2Names = this._parseNameInTwoNames(author2);

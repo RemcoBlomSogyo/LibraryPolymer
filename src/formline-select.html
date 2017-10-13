@@ -14,18 +14,22 @@
         margin: 0 10px 0 0;
       }
 
-      select {
+      .field {
         float: right;
         width: 200px;
       }
 
       .form-line-container {
-        height: 50px;
+        height: 60px;
       }
     </style>
 
     <div class="form-line-container">
-      <select id=selectField>
+      <div id="inputFields">
+        <input id="inputField1" class="field" type="text" placeholder="Voornaam" value={{inputValue}}></input>
+        <input id="inputField2" class="field" type="text" placeholder="Achternaam" value={{inputValue}}></input>
+      </div>
+      <select id="selectField" class="field">
         <option value="">(leeg)</option>
         <template is="dom-repeat" items="[[authors]]">
           <option value="{{item.forename}} {{item.surname}}">{{item.forename}} {{item.surname}}</option>
@@ -33,7 +37,7 @@
       </select>
       <p>{{name}}</p>
 
-      <paper-toggle-button></paper-toggle-button>
+      <paper-toggle-button id="toggleButton" on-change="_switchFormLine"></paper-toggle-button>
     </div>
 
   </template>
@@ -47,9 +51,43 @@
         authors: Array
       },
 
-      getSelectedValue: function() {
-        var selectField = this.$.selectField;
-        return selectField.options[selectField.selectedIndex].value;
+      ready: function() {
+        this._removeInputLines();
+      },
+
+      getAuthorValue: function() {
+        if (this.$.toggleButton.checked) {
+          return this.$.inputField1.value + " " + this.$.inputField2.value;
+        } else {
+          var selectField = this.$.selectField;
+          return selectField.options[selectField.selectedIndex].value;
+        }
+      },
+
+      _switchFormLine: function() {
+        if (this.$.toggleButton.checked) {
+          this._removeSelectLine();
+          this._setInputLines();
+        } else {
+          this._removeInputLines();
+          this._setSelectLine();
+        }
+      },
+
+      _setInputLines: function() {
+        this.$.inputFields.style.display = "block";
+      },
+
+      _removeInputLines: function() {
+        this.$.inputFields.style.display = "none";
+      },
+
+      _setSelectLine: function() {
+        this.$.selectField.style.display = "block";
+      },
+
+      _removeSelectLine: function() {
+        this.$.selectField.style.display = "none";
       }
     });
   </script>
