@@ -328,14 +328,18 @@
         if (this.observerOn) {
           this.$.formLineTitle.inputValue = this.bookFormInput.title;
           this.$.formLineSubtitle.inputValue = this.bookFormInput.subtitle;
-          this.$.formLineAuthorForename1.inputValue = this.bookFormInput.authorForename1;
-          this.$.formLineAuthorSurname1.inputValue = this.bookFormInput.authorSurname1;
-          this.$.formLineAuthorForename2.inputValue = this.bookFormInput.authorForename2;
-          this.$.formLineAuthorSurname2.inputValue = this.bookFormInput.authorSurname2;
-          this.$.formLineAuthorForename3.inputValue = this.bookFormInput.authorForename3;
-          this.$.formLineAuthorSurname3.inputValue = this.bookFormInput.authorSurname3;
-          this.$.formLineCategory.inputValue = this.bookFormInput.category;
-          this.$.formLinePublisher.inputValue = this.bookFormInput.publisher;
+          // this.$.formLineAuthorForename1.inputValue = this.bookFormInput.authorForename1;
+          // this.$.formLineAuthorSurname1.inputValue = this.bookFormInput.authorSurname1;
+          // this.$.formLineAuthorForename2.inputValue = this.bookFormInput.authorForename2;
+          // this.$.formLineAuthorSurname2.inputValue = this.bookFormInput.authorSurname2;
+          // this.$.formLineAuthorForename3.inputValue = this.bookFormInput.authorForename3;
+          // this.$.formLineAuthorSurname3.inputValue = this.bookFormInput.authorSurname3;
+          this.$.formLineAuthor1.authorSelected = this.bookFormInput.authorForename1 + " " + this.bookFormInput.authorSurname1;
+          console.log(this.bookFormInput.authorForename1 + " " + this.bookFormInput.authorSurname1);
+          this.$.formLineAuthor2.authorSelected = this.bookFormInput.authorForename2 + " " + this.bookFormInput.authorSurname2;
+          this.$.formLineAuthor3.authorSelected = this.bookFormInput.authorForename3 + " " + this.bookFormInput.authorSurname3;
+          this.$.formLineCategory.inputValue = this.bookFormInput.category.name;
+          this.$.formLinePublisher.inputValue = this.bookFormInput.publisher.name;
           this.$.formLineYearFirstPublication.inputValue = this.bookFormInput.yearFirstPublication;
           this.$.formLineIsbn.inputValue = this.bookFormInput.isbn;
           this.$.formLinePages.inputValue = this.bookFormInput.pages;

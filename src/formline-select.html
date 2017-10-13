@@ -47,8 +47,11 @@
       is: "formline-select",
       properties: {
         name: String,
-        inputID: String,
-        authors: Array
+        authors: Array,
+        authorSelected: {
+          type: String,
+          observer: "_setSelection"
+        }
       },
 
       ready: function() {
@@ -88,6 +91,18 @@
 
       _removeSelectLine: function() {
         this.$.selectField.style.display = "none";
+      },
+
+      _setSelection: function() {
+        console.log(this.authorSelected);
+        // Polymer.dom(this.$.selectField).querySelector(this.authorSelected).selected = true;
+        // this.$.(this.authorSelected).selected = true;
+        // Polymer.dom(this.root).querySelector(this.authorSelected).selected = true;
+        // Polymer.dom(this.root).querySelectorAll(this.authorSelected).selected = true;
+        // Polymer.dom(this.root).querySelectorAll("Komijn Kaas").selected = true;
+
+        this.$.selectField.value = this.authorSelected;
+        // document.getElementById(this.authorSelected)
       }
     });
   </script>
