@@ -2,17 +2,17 @@
   "entrypoint": "index.html",
   "shell": "src/my-app.html",
   "fragments": [
-    "src/my-view1.html",
-    "src/my-view2.html",
-    "src/my-view3.html",
-    "src/my-view404.html",
-    "src/search-book.html",
-    "src/search-form.html",
-    "src/form-line.html",
-    "src/list-item.html",
+    "src/add-book.html",
     "src/book-form.html",
+    "src/book-info.html",
+    "src/edit-book.html",
+    "src/form-line.html",
+    "src/formline-select.html",
+    "src/list-item.html",
+    "src/my-view404.html",
     "src/scrollable-list.html",
-    "src/add-book.html"
+    "src/search-book.html",
+    "src/search-form.html"
   ],
   "sources": [
     "src/**/*",

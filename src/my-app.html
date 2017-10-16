@@ -22,11 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
 
-<link rel="lazy-import" href="my-view1.html">
-<link rel="lazy-import" href="my-view2.html">
-<link rel="lazy-import" href="my-view3.html">
 <link rel="lazy-import" href="my-view404.html">
-
 <link rel="lazy-import" href="search-book.html">
 <link rel="lazy-import" href="add-book.html">
 <link rel="lazy-import" href="book-info.html">
@@ -36,9 +32,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style>
       :host {
-        --app-primary-color: #4285f4;
+        --app-primary-color: #007936;
         --app-secondary-color: black;
-
         display: block;
       }
 
@@ -85,9 +80,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="my-view1" href="[[rootPath]]my-view1">View One</a>
-          <a name="my-view2" href="[[rootPath]]my-view2">View Two</a>
-          <a name="my-view3" href="[[rootPath]]my-view3">View Three</a>
           <a name="search-book" href="[[rootPath]]search-book">Zoeken</a>
           <a name="add-book" href="[[rootPath]]add-book">Toevoegen</a>
         </iron-selector>
@@ -99,7 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title>My App</div>
+            <div main-title>Sogyo Library</div>
           </app-toolbar>
         </app-header>
 
@@ -108,9 +100,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="my-view404"
             role="main">
-          <my-view1 name="my-view1"></my-view1>
-          <my-view2 name="my-view2"></my-view2>
-          <my-view3 name="my-view3"></my-view3>
           <my-view404 name="my-view404"></my-view404>
           <search-book name="search-book"></search-book>
           <add-book name="add-book"></add-book>
@@ -149,7 +138,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _routePageChanged(page) {
         // If no page was found in the route data, page will be an empty string.
         // Deault to 'view1' in that case.
-        this.page = page || 'my-view1';
+        this.page = page || 'search-book';
 
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {
