@@ -34,14 +34,6 @@
         background-color: #479C5E;
       }
 
-      /*.formLineAuthor2 {
-        display: none;
-      }
-
-      .formLineAuthor3 {
-        display: none;
-      }*/
-
       #buttonContainer {
         height: 100px;
       }
@@ -82,12 +74,6 @@
       <formline-select id="formLineAuthor1" name="Auteur *" authors={{authors}}></formline-select>
       <formline-select id="formLineAuthor2" name="(2) Auteur" authors={{authors}}></formline-select>
       <formline-select id="formLineAuthor3" name="(3) Auteur" authors={{authors}}></formline-select>
-      <!--<form-line id="formLineAuthorForename1" name="Auteur voornaam *"></form-line>
-      <form-line id="formLineAuthorSurname1" name="Auteur achternaam *"></form-line>
-      <form-line id="formLineAuthorForename2" class=formLineAuthor2 name="(2) Auteur voornaam"></form-line>
-      <form-line id="formLineAuthorSurname2" class=formLineAuthor2 name="(2) Auteur achternaam"></form-line>
-      <form-line id="formLineAuthorForename3" class=formLineAuthor3 name="(3) Auteur voornaam"></form-line>
-      <form-line id="formLineAuthorSurname3" class=formLineAuthor3 name="(3) Auteur achternaam"></form-line>-->
       <div id="buttonContainer">
         <paper-button raised id="deleteAuthorButton" class="authorButton" on-tap="deleteAuthorFormLine">-</paper-button>
         <paper-button raised id="addAuthorButton" class="authorButton" on-tap="addAuthorFormLine">+</paper-button>
@@ -144,11 +130,6 @@
 
       ready: function() {
         this.$.container.style.height = this.containerHeight1;
-        // this.$.formLineAuthorForename2.style.display = "none";
-        // this.$.formLineAuthorSurname2.style.display = "none";
-        // this.$.formLineAuthorForename3.style.display = "none";
-        // this.$.formLineAuthorSurname3.style.display = "none";
-
         this.$.formLineAuthor2.style.display = "none";
         this.$.formLineAuthor3.style.display = "none";
         this.$.deleteAuthorButton.style.visibility = "hidden";
@@ -159,15 +140,11 @@
       addAuthorFormLine: function() {
         if (this.authorsVisible === 1) {
           this.$.container.style.height = this.containerHeight2;
-          // this.$.formLineAuthorForename2.style.display = "block";
-          // this.$.formLineAuthorSurname2.style.display = "block";
           this.$.formLineAuthor2.style.display = "block";
           this.$.formLineAuthor2.style.display = "block";
           this.authorsVisible = 2;
         } else if (this.authorsVisible === 2) {
           this.$.container.style.height = this.containerHeight3;
-          // this.$.formLineAuthorForename3.style.display = "block";
-          // this.$.formLineAuthorSurname3.style.display = "block";
           this.$.formLineAuthor3.style.display = "block";
           this.$.formLineAuthor3.style.display = "block";
           this.$.addAuthorButton.style.visibility = "hidden";
@@ -179,16 +156,12 @@
       deleteAuthorFormLine: function() {
         if (this.authorsVisible === 2) {
           this.$.container.style.height = this.containerHeight1;
-          // this.$.formLineAuthorForename2.style.display = "none";
-          // this.$.formLineAuthorSurname2.style.display = "none";
           this.$.formLineAuthor2.style.display = "none";
           this.$.formLineAuthor2.style.display = "none";
           this.$.deleteAuthorButton.style.visibility = "hidden";
           this.authorsVisible = 1;
         } else if (this.authorsVisible === 3) {
           this.$.container.style.height = this.containerHeight2;
-          // this.$.formLineAuthorForename3.style.display = "none";
-          // this.$.formLineAuthorSurname3.style.display = "none";
           this.$.formLineAuthor3.style.display = "none";
           this.$.formLineAuthor3.style.display = "none";
           this.authorsVisible = 2;
@@ -217,12 +190,6 @@
         this.bookFormInput = {
           title: this.$.formLineTitle.getInputValue(),
           subtitle: this.$.formLineSubtitle.getInputValue(),
-          // authorForename1: this.$.formLineAuthorForename1.getInputValue(),
-          // authorSurname1: this.$.formLineAuthorSurname1.getInputValue(),
-          // authorForename2: this.$.formLineAuthorForename2.getInputValue(),
-          // authorSurname2: this.$.formLineAuthorSurname2.getInputValue(),
-          // authorForename3: this.$.formLineAuthorForename3.getInputValue(),
-          // authorSurname3: this.$.formLineAuthorSurname3.getInputValue(),
           authorForename1: author1Names.authorForename,
           authorSurname1: author1Names.authorSurname,
           authorForename2: author2Names.authorForename,
@@ -328,12 +295,6 @@
         if (this.observerOn) {
           this.$.formLineTitle.inputValue = this.bookFormInput.title;
           this.$.formLineSubtitle.inputValue = this.bookFormInput.subtitle;
-          // this.$.formLineAuthorForename1.inputValue = this.bookFormInput.authorForename1;
-          // this.$.formLineAuthorSurname1.inputValue = this.bookFormInput.authorSurname1;
-          // this.$.formLineAuthorForename2.inputValue = this.bookFormInput.authorForename2;
-          // this.$.formLineAuthorSurname2.inputValue = this.bookFormInput.authorSurname2;
-          // this.$.formLineAuthorForename3.inputValue = this.bookFormInput.authorForename3;
-          // this.$.formLineAuthorSurname3.inputValue = this.bookFormInput.authorSurname3;
           this.$.formLineAuthor1.authorSelected = this.bookFormInput.authorForename1 + " " + this.bookFormInput.authorSurname1;
           console.log(this.bookFormInput.authorForename1 + " " + this.bookFormInput.authorSurname1);
           this.$.formLineAuthor2.authorSelected = this.bookFormInput.authorForename2 + " " + this.bookFormInput.authorSurname2;

@@ -24,14 +24,15 @@
         searchResults: {
           type: Array,
           observer: "setResultsInList"
-        }
+        },
+        message: String
       },
 
       ready: function() {
         var url = document.location.href;
         var urlParts = url.split('/');
         if (urlParts.pop() === "deletesuccessful") {
-          this.$.containerMessage.innerHTML = "Boek en exemplaren succesvol verwijderd";
+          this.message = "Boek en exemplaren succesvol verwijderd";
         }
       },
 

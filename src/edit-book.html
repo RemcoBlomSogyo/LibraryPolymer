@@ -20,7 +20,7 @@
 
     <br/>
     <book-form id="book-form" add-edit-book-message={{editBookMessage}} book-form-input={{bookFormInput}} button-text="Wijzigen"></book-form>
-    <h3 id="containerMessage"></h3>
+    <h3 id="containerMessage">{{message}}</h3>
   </template>
 
   <script>
@@ -32,7 +32,8 @@
         editBookMessage: {
           type: Object,
           observer: "handleMessage"
-        }
+        },
+        message: String
       },
 
       ready: function() {
@@ -44,8 +45,6 @@
 
       handleBookInfoResponse: function(data) {
         var bookInfo = data.detail.response;
-
-        // this.bookFormInput = bookInfo.book;
 
         var authorForename2Text = "";
         var authorSurname2Text = "";
@@ -82,9 +81,9 @@
 
       handleMessage: function() {
         if (this.editBookMessage.commandSucceeded) {
-          window.location.href = "book-info/" + this.bookId + "/editsuccessful";
+          window.location.href = `book-info/${this.bookId}/editsuccessful`;
         } else {
-          this.$.containerMessage.innerHTML = this.editBookMessage.message;
+          this.message = this.editBookMessage.message;
         }
       }
 

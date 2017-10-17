@@ -39,7 +39,9 @@
       <img id="bookImage"></img>
       <div id="titleAuthor">
         <h3 class="listItemText" id="bookTitle">[[title]]</h3>
-        <h4 class="listItemText" id="bookAuthors"></h4>
+        <h4 class="listItemText" id="bookAuthor1">{{author1}}</h4>
+        <h4 class="listItemText" id="bookAuthor2">{{author2}}</h4>
+        <h4 class="listItemText" id="bookAuthor3">{{author3}}</h4>
       </div>
       <div id="categoryIsbn">
         <p class="listItemText" id="copiesAvailable">Categorie: <span>[[category]]</span></p>
@@ -59,19 +61,22 @@
           type: Array,
           observer: "addExtraAuthors"
         },
+        author1: String,
+        author2: String,
+        author3: String,
         category: String,
         isbn: String
       },
 
       addExtraAuthors: function() {
-        this.$.bookAuthors.innerHTML = (this.authors[0].forename + " " + this.authors[0].surname);
+        this.author1 = (this.authors[0].forename + " " + this.authors[0].surname);
 
         if (this.authors.length >= 2) {
-          this.$.bookAuthors.innerHTML += ("<br/>" + this.authors[1].forename + " " + this.authors[1].surname);
+          this.author2 = (this.authors[1].forename + " " + this.authors[1].surname);
         }
 
         if (this.authors.length === 3) {
-          this.$.bookAuthors.innerHTML += ("<br/>" + this.authors[2].forename + " " + this.authors[2].surname);
+          this.author3 = (this.authors[2].forename + " " + this.authors[2].surname);
         }
       }
     });

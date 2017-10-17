@@ -30,8 +30,8 @@
         <td id="subtitle">{{bookInfo.book.subtitle}}</td>
       </tr>
       <tr>
-        <th id="authorsTitle">Auteur</th>
-        <td id="authors">{{bookInfo.book.authorForename}} {{bookInfo.book.authorSurname}}</td>
+        <th id="authorsTitle">{{authorsTitle}}</th>
+        <td id="authors">{{authors}}</td>
       </tr>
       <tr>
         <th>Categorie</th>
@@ -59,7 +59,7 @@
       </tr>
     </table>
 
-    <h4 id="copiesAvailableContainer">Beschikbaar: <span id="copiesavailable">{{bookInfo.copiesAvailable}}</span></h4>
+    <h4 id="copiesAvailableContainer">Beschikbaar: <span id="copiesavailable">{{copiesAvailable}}</span></h4>
     <paper-button raised id="plus-button" on-tap="addCopy">+</paper-button>
     <paper-button raised id="minus-button" on-tap="deleteCopy">-</paper-button>
     <h4>Uitgeleend: 0</h4>
@@ -67,7 +67,7 @@
     <paper-button raised id="edit-book-button" on-tap="goToEditBook">Boek wijzigen</paper-button>
     <paper-button raised id="delete-book-button" on-tap="deleteBook">Boek verwijderen</paper-button>
 
-    <h4 id="containerMessage"></h4>
+    <h4 id="containerMessage">{{message}}</h4>
 
     <iron-ajax
       id="requestBookInfo"
@@ -107,7 +107,14 @@
       is: "book-info",
       properties: {
         bookId: Number,
-        bookInfo: Object
+        bookInfo: Object,
+        message: String,
+        copiesAvailable: Number,
+        authorsTitle: {
+          type: String,
+          value: "Auteur"
+        },
+        authors: String
       },
 
       ready: function() {
@@ -115,10 +122,10 @@
         var urlParts = url.split('/');
         var lastUrlPart = urlParts.pop();
         if (lastUrlPart === "addsuccessful") {
-          this.$.containerMessage.innerHTML = "Boek succesvol toegevoegd";
+          this.message = "Boek succesvol toegevoegd";
           this.bookId = urlParts.pop();
         } else if (lastUrlPart === "editsuccessful") {
-          this.$.containerMessage.innerHTML = "Boek succesvol aangepast";
+          this.message = "Boek succesvol aangepast";
           this.bookId = urlParts.pop();
         } else {
           this.bookId = lastUrlPart;
@@ -128,25 +135,25 @@
 
       handleBookInfoResponse: function(data) {
         this.bookInfo = data.detail.response;
-        this.$.authors.innerHTML = (this.bookInfo.book.authors[0].forename + " " + this.bookInfo.book.authors[0].surname);
+        this.copiesAvailable = this.bookInfo.copiesAvailable;
+        this.authors = (this.bookInfo.book.authors[0].forename + " " + this.bookInfo.book.authors[0].surname);
 
         if (this.bookInfo.book.authors.length >= 2) {
-          this.$.authorsTitle.innerHTML += "s";
-          this.$.authors.innerHTML += (", " + this.bookInfo.book.authors[1].forename + " " + this.bookInfo.book.authors[1].surname);
+          this.authorsTitle += "s";
+          this.authors += (", " + this.bookInfo.book.authors[1].forename + " " + this.bookInfo.book.authors[1].surname);
         }
 
         if (this.bookInfo.book.authors.length === 3) {
-          this.$.authors.innerHTML += (", " + this.bookInfo.book.authors[2].forename + " " + this.bookInfo.book.authors[2].surname);
+          this.authors += (", " + this.bookInfo.book.authors[2].forename + " " + this.bookInfo.book.authors[2].surname);
         }
       },
 
       handleCopyResponse: function(data) {
         var copyMessage = data.detail.response;
         if (copyMessage.commandSucceeded) {
-          this.bookInfo.copiesAvailable = copyMessage.copiesOfBook;
-          this.$.copiesavailable.innerHTML = copyMessage.copiesOfBook;
+          this.copiesAvailable = copyMessage.copiesOfBook;
         }
-        this.$.containerMessage.innerHTML = copyMessage.message;
+        this.message = copyMessage.message;
       },
 
       handleDeleteBookResponse: function(data) {
@@ -154,7 +161,7 @@
         if (deleteBookMessage.commandSucceeded) {
           window.location.href = "search-book/deletesuccessful";
         } else {
-          this.$.containerMessage.innerHTML = deleteBookMessage.message;
+          this.message = deleteBookMessage.message;
         }
       },
 
@@ -169,7 +176,7 @@
       },
 
       goToEditBook: function() {
-        window.location.href = "edit-book/" + this.bookId;
+        window.location.href = `edit-book/${this.bookId}`;
       },
 
       deleteBook: function() {
