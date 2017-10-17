@@ -126,6 +126,7 @@
           type: String,
           value: "850px"
         },
+        messages: Array
       },
 
       ready: function() {
@@ -234,33 +235,37 @@
       },
 
       validateInput: function() {
-        var validateMessage = {commandSucceeded: false, message: ""};
+        var inputIsValid = true;
         if (this.bookFormInput.title === "") {
-          validateMessage.message = "Vul een titel in";
-        } else if (this.bookFormInput.authorForename1 === "") {
-          validateMessage.message = "Vul een voornaam in";
-        } else if (this.bookFormInput.authorSurname1 === "") {
-          validateMessage.message = "Vul een achternaam in";
-        } else if (this.bookFormInput.category === "") {
-          validateMessage.message = "Vul een categorie in";
-        } else if (this.bookFormInput.publisher === "") {
-          validateMessage.message = "Vul een uitgever in";
-        } else if (this.bookFormInput.isbn === "") {
-          validateMessage.message = "Vul een ISBN in";
+          this.$.formLineTitle.message = "Vul een titel in";
+          inputIsValid = false;
+        }
+        if (this.bookFormInput.authorForename1 === "" || this.bookFormInput.authorSurname1 === "") {
+          this.$.formLineAuthor1.message = "Vul een volledige naam in";
+          inputIsValid = false;
+        }
+        if (this.bookFormInput.category === "") {
+          this.$.formLineCategory.message = "Vul een categorie in";
+          inputIsValid = false;
+        }
+        if (this.bookFormInput.publisher === "") {
+          this.$.formLinePublisher.message = "Vul een uitgever in";
+          inputIsValid = false;
+        }
+        if (this.bookFormInput.isbn === "") {
+          this.$.formLineIsbn.message = "Vul een ISBN in";
+          inputIsValid = false;
         } else if (this.isbnIsNotValid(this.bookFormInput.isbn)) {
-          validateMessage.message = "Opgegeven ISBN is onjuist";
-        } else {
-          validateMessage.commandSucceeded = true;
+          this.$.formLineIsbn.message = "Opgegeven ISBN is onjuist";
+          inputIsValid = false;
         }
 
-        if (validateMessage.commandSucceeded) {
+        if (inputIsValid) {
           if (this.buttonText === "Toevoegen") {
             this.$.addBook.generateRequest();
           } else {
             this.$.editBook.generateRequest();
           }
-        } else {
-          this.addEditBookMessage = validateMessage;
         }
       },
 

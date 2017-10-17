@@ -26,6 +26,8 @@
     <div class="form-line-container">
       <input id=inputField type="text" value={{inputValue}}></input>
       <p>{{name}}</p>
+      <br/>
+      <p id="message">{{message}}</p>
     </div>
 
   </template>
@@ -35,7 +37,8 @@
       is: "form-line",
       properties: {
         name: String,
-        inputValue: String
+        inputValue: String,
+        message: String
       },
 
       getInputValue: function() {

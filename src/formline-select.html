@@ -38,6 +38,7 @@
       <p>{{name}}</p>
 
       <paper-toggle-button id="toggleButton" on-change="_switchFormLine"></paper-toggle-button>
+      <p id="message">{{message}}</p>
     </div>
 
   </template>
@@ -51,7 +52,8 @@
         authorSelected: {
           type: String,
           observer: "_setSelection"
-        }
+        },
+        message: String
       },
 
       ready: function() {
