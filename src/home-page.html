@@ -3,6 +3,7 @@
 
 <link rel="import" href="../bower_components/google-signin/google-signin.html">
 <link rel="import" href="../bower_components/google-signin/google-signin-aware.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module id="home-page">
   <template>
@@ -10,6 +11,15 @@
     <style>
 
     </style>
+
+    <iron-ajax
+      id="sendSignInCode"
+      url="http://localhost:9999/SogyoLibrary/rest/signin"
+      content-type="application/json"
+      method="POST"
+      body={{signInCode}}
+      handle-as="json">
+    </iron-ajax>
 
     <google-signin
       client-id="1000284014442-khpk4ottrb9c0njde9ho3nbqrkdo7p99.apps.googleusercontent.com"
@@ -27,6 +37,9 @@
   <script>
     Polymer({
       is: "home-page",
+      properties: {
+        signInCode: Object
+      },
       listeners: {
         "google-signin-offline-success": "signInSuccessHandler"
       },
@@ -45,7 +58,9 @@
         //var idToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
         //console.log(idToken);
         console.log(response.detail.code);
-        
+        this.signInCode = {code: response.detail.code};
+        console.log(this.signInCode);
+        this.$.sendSignInCode.generateRequest();
       },
       // offlineAccessHandler: function(response) {
       //   console.log(response['code']);
