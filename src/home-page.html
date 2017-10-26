@@ -1,6 +1,4 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
-<!-- <meta name="google-signin-client_id" content="1000284014442-khpk4ottrb9c0njde9ho3nbqrkdo7p99.apps.googleusercontent.com"> -->
-
 <link rel="import" href="../bower_components/google-signin/google-signin.html">
 <link rel="import" href="../bower_components/google-signin/google-signin-aware.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
@@ -21,18 +19,14 @@
       handle-as="json">
     </iron-ajax>
 
+    <!-- ander uiterlijk knop om sign-out te verbergen-->
     <google-signin
       client-id="1000284014442-khpk4ottrb9c0njde9ho3nbqrkdo7p99.apps.googleusercontent.com"
       scopes="email profile"
       offline>
     </google-signin>
 
-    <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
-    <!-- <div class="g-signin2" data-onsuccess="onSignIn"></div> -->
   </template>
-
-
-  <!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
 
   <script>
     Polymer({
@@ -44,27 +38,9 @@
         "google-signin-offline-success": "signInSuccessHandler"
       },
       signInSuccessHandler: function(response) {
-        // var profile = googleUser.getBasicProfile();
-        // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-        // console.log('Name: ' + profile.getName());
-        // console.log('Image URL: ' + profile.getImageUrl());
-        // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-      // console.log(gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getId());
-      // console.log(gapi.auth2.grantOfflineAccess().then(this.offlineAccessHandler));
-        // console.log(e);
-        // var gapi = e.detail.gapi;
-        // console.log(gapi);
-        // console.log(e.detail);
-        //var idToken = gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
-        //console.log(idToken);
-        console.log(response.detail.code);
         this.signInCode = {code: response.detail.code};
-        console.log(this.signInCode);
         this.$.sendSignInCode.generateRequest();
-      },
-      // offlineAccessHandler: function(response) {
-      //   console.log(response['code']);
-      // }
+      }
     });
   </script>
 </dom-module>
