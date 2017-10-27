@@ -12,11 +12,12 @@
 
     <iron-ajax
       id="sendIdToken"
-      url="http://localhost:9999/SogyoLibrary/rest/signin"
+      url="http://localhost:9999/SogyoLibrary/rest/register"
       content-type="application/json"
       method="POST"
       body={{idToken}}
-      handle-as="json">
+      handle-as="json"
+      on-response="handleRegisterResponse">
     </iron-ajax>
 
     <!-- ander uiterlijk knop om sign-out te verbergen-->
@@ -46,6 +47,9 @@
         // console.log(this.idToken);
         this.idToken = {idTokenString: googleUser.getAuthResponse().id_token};
         this.$.sendIdToken.generateRequest();
+      },
+      handleRegisterResponse(data) {
+        console.log(data.detail.response);
       }
     });
   </script>
