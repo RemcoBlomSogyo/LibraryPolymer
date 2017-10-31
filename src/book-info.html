@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="token-ajax.html">
 
 <dom-module id="book-info">
   <template>
@@ -69,37 +70,33 @@
 
     <h4 id="containerMessage">{{message}}</h4>
 
-    <iron-ajax
+    <token-ajax
       id="requestBookInfo"
-      url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}"
+      path="book/{{bookId}}"
       method="GET"
-      handle-as="json"
-      on-response="handleBookInfoResponse">
-    </iron-ajax>
+      response-data={{bookInfo}}>
+    </token-ajax>
 
-    <iron-ajax
+    <token-ajax
       id="addCopy"
-      url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}/copy"
+      path="book/{{bookId}}/copy"
       method="POST"
-      handle-as="json"
-      on-response="handleCopyResponse">
-    </iron-ajax>
+      response-data={{copyMessage}}>
+    </token-ajax>
 
-    <iron-ajax
+    <token-ajax
       id="deleteCopy"
-      url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}/copy"
+      path="book/{{bookId}}/copy"
       method="DELETE"
-      handle-as="json"
-      on-response="handleCopyResponse">
-    </iron-ajax>
+      response-data={{copyMessage}}>
+    </token-ajax>
 
-    <iron-ajax
+    <token-ajax
       id="deleteBook"
-      url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}"
+      path="book/{{bookId}}"
       method="DELETE"
-      handle-as="json"
-      on-response="handleDeleteBookResponse">
-    </iron-ajax>
+      response-data={{deleteBookMessage}}>
+    </token-ajax>
   </template>
 
   <script>
@@ -107,7 +104,18 @@
       is: "book-info",
       properties: {
         bookId: Number,
-        bookInfo: Object,
+        bookInfo: {
+          type: Object,
+          observer: "handleBookInfoResponse"
+        },
+        copyMessage: {
+          type: Object,
+          observer: "handleCopyResponse"
+        },
+        deleteBookMessage: {
+          type: Object,
+          observer: "handleDeleteBookResponse"
+        },
         message: String,
         copiesAvailable: Number,
         authorsTitle: {
@@ -133,8 +141,7 @@
         this.$.requestBookInfo.generateRequest();
       },
 
-      handleBookInfoResponse: function(data) {
-        this.bookInfo = data.detail.response;
+      handleBookInfoResponse: function() {
         this.copiesAvailable = this.bookInfo.copiesAvailable;
         this.authors = (this.bookInfo.book.authors[0].forename + " " + this.bookInfo.book.authors[0].surname);
 
@@ -148,20 +155,19 @@
         }
       },
 
-      handleCopyResponse: function(data) {
-        var copyMessage = data.detail.response;
-        if (copyMessage.commandSucceeded) {
-          this.copiesAvailable = copyMessage.copiesOfBook;
+      handleCopyResponse: function() {
+        console.log(this.copyMessage);
+        if (this.copyMessage.commandSucceeded) {
+          this.copiesAvailable = this.copyMessage.copiesOfBook;
         }
-        this.message = copyMessage.message;
+        this.message = this.copyMessage.message;
       },
 
-      handleDeleteBookResponse: function(data) {
-        var deleteBookMessage = data.detail.response;
-        if (deleteBookMessage.commandSucceeded) {
+      handleDeleteBookResponse: function() {
+        if (this.deleteBookMessage.commandSucceeded) {
           window.location.href = "search-book/deletesuccessful";
         } else {
-          this.message = deleteBookMessage.message;
+          this.message = this.deleteBookMessage.message;
         }
       },
 
@@ -170,7 +176,8 @@
       },
 
       deleteCopy: function() {
-        if (this.bookInfo.copiesAvailable > 0) {
+        console.log(this.copiesAvailable);
+        if (this.copiesAvailable > 0) {
           this.$.deleteCopy.generateRequest();
         }
       },

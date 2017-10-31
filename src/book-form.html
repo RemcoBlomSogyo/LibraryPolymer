@@ -3,6 +3,8 @@
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="form-line.html">
 <link rel="import" href="formline-select.html">
+<link rel="import" href="token-ajax.html">
+<link rel="import" href="token-body-ajax.html">
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
 <dom-module id="book-form">
@@ -39,7 +41,7 @@
       }
     </style>
 
-    <iron-ajax
+    <!-- <iron-ajax
       id="addBook"
       url="http://localhost:9999/SogyoLibrary/rest/book"
       content-type="application/json"
@@ -47,9 +49,17 @@
       body={{bookFormInput}}
       handle-as="json"
       on-response="handleMessageResponse">
-    </iron-ajax>
+    </iron-ajax> -->
 
-    <iron-ajax
+    <token-body-ajax
+      id="addBook"
+      path="book"
+      method="POST"
+      body={{bookFormInput}}
+      response-data="{{addEditBookMessage}}">
+    </token-body-ajax>
+
+    <!-- <iron-ajax
       id="editBook"
       url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}"
       content-type="application/json"
@@ -57,16 +67,30 @@
       body={{bookFormInput}}
       handle-as="json"
       on-response="handleMessageResponse">
-    </iron-ajax>
+    </iron-ajax> -->
 
-    <iron-ajax
+    <token-body-ajax
+      id="editBook"
+      path="book/{{bookId}}"
+      method="PUT"
+      body={{bookFormInput}}
+      response-data="{{addEditBookMessage}}">
+    </token-body-ajax>
+
+    <!-- <iron-ajax
       id="getAllAuthors"
       url="http://localhost:9999/SogyoLibrary/rest/authors"
       method="GET"
-      body={{bookFormInput}}
       handle-as="json"
       on-response="handleAuthorsResponse">
-    </iron-ajax>
+    </iron-ajax> -->
+
+    <token-ajax
+      id="getAllAuthors"
+      path="authors"
+      method="GET"
+      response-data={{authors}}>
+    </token-ajax>
 
     <div id="container">
       <form-line id="formLineTitle" name="Titel *"></form-line>
@@ -226,13 +250,13 @@
         return name;
       },
 
-      handleMessageResponse: function(data) {
-        this.addEditBookMessage = data.detail.response;
-      },
+      // handleMessageResponse: function(data) {
+      //   this.addEditBookMessage = data.detail.response;
+      // },
 
-      handleAuthorsResponse: function(data) {
-        this.authors = data.detail.response;
-      },
+      // handleAuthorsResponse: function(data) {
+      //   this.authors = data.detail.response;
+      // },
 
       validateInput: function() {
         var inputIsValid = true;
@@ -302,22 +326,23 @@
           this.$.formLineSubtitle.inputValue = this.bookFormInput.subtitle;
           this.$.formLineAuthor1.authorSelected = this.bookFormInput.authorForename1 + " " + this.bookFormInput.authorSurname1;
           console.log(this.bookFormInput.authorForename1 + " " + this.bookFormInput.authorSurname1);
-          this.$.formLineAuthor2.authorSelected = this.bookFormInput.authorForename2 + " " + this.bookFormInput.authorSurname2;
-          this.$.formLineAuthor3.authorSelected = this.bookFormInput.authorForename3 + " " + this.bookFormInput.authorSurname3;
+
+          if (this.bookFormInput.authorForename2 !== "") {
+            this.addAuthorFormLine();
+            this.$.formLineAuthor2.authorSelected = this.bookFormInput.authorForename2 + " " + this.bookFormInput.authorSurname2;
+          }
+
+          if (this.bookFormInput.authorForename3 !== "") {
+            this.addAuthorFormLine();
+            this.$.formLineAuthor3.authorSelected = this.bookFormInput.authorForename3 + " " + this.bookFormInput.authorSurname3;
+          }
+
           this.$.formLineCategory.inputValue = this.bookFormInput.category.name;
           this.$.formLinePublisher.inputValue = this.bookFormInput.publisher.name;
           this.$.formLineYearFirstPublication.inputValue = this.bookFormInput.yearFirstPublication;
           this.$.formLineIsbn.inputValue = this.bookFormInput.isbn;
           this.$.formLinePages.inputValue = this.bookFormInput.pages;
           this.$.formLineLanguage.inputValue = this.bookFormInput.language;
-
-          if (this.bookFormInput.authorForename2 !== "") {
-            this.addAuthorFormLine();
-          }
-
-          if (this.bookFormInput.authorForename3 !== "") {
-            this.addAuthorFormLine();
-          }
         }
       }
     });

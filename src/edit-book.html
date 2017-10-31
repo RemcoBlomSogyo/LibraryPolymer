@@ -10,13 +10,20 @@
       }
     </style>
 
-    <iron-ajax
+    <!-- <iron-ajax
       id="requestBookInfo"
       url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}"
       method="GET"
       handle-as="json"
       on-response="handleBookInfoResponse">
-    </iron-ajax>
+    </iron-ajax> -->
+
+    <token-ajax
+      id="requestBookInfo"
+      path="book/{{bookId}}"
+      method="GET"
+      response-data={{bookInfo}}>
+    </token-ajax>
 
     <br/>
     <book-form id="book-form" add-edit-book-message={{editBookMessage}} book-form-input={{bookFormInput}} button-text="Wijzigen"></book-form>
@@ -29,6 +36,10 @@
       properties: {
         bookId: Number,
         bookFormInput: Object,
+        bookInfo: {
+          type: Object,
+          observer: "handleBookInfoResponse"
+        },
         editBookMessage: {
           type: Object,
           observer: "handleMessage"
@@ -43,43 +54,78 @@
         this.$.requestBookInfo.generateRequest();
       },
 
-      handleBookInfoResponse: function(data) {
-        var bookInfo = data.detail.response;
+      // handleBookInfoResponse: function(data) {
+      //   var bookInfo = data.detail.response;
+      //
+      //   var authorForename2Text = "";
+      //   var authorSurname2Text = "";
+      //   var authorForename3Text = "";
+      //   var authorSurname3Text = "";
+      //
+      //   if (bookInfo.book.authors.length >= 2) {
+      //     authorForename2Text = bookInfo.book.authors[1].forename;
+      //     authorSurname2Text = bookInfo.book.authors[1].surname;
+      //   }
+      //
+      //   if (bookInfo.book.authors.length === 3) {
+      //     authorForename3Text = bookInfo.book.authors[2].forename;
+      //     authorSurname3Text = bookInfo.book.authors[2].surname;
+      //   }
+      //
+      //   this.bookFormInput = {
+      //     title: bookInfo.book.title,
+      //     subtitle: bookInfo.book.subtitle,
+      //     authorForename1: bookInfo.book.authors[0].forename,
+      //     authorSurname1: bookInfo.book.authors[0].surname,
+      //     authorForename2: authorForename2Text,
+      //     authorSurname2: authorSurname2Text,
+      //     authorForename3: authorForename3Text,
+      //     authorSurname3: authorSurname3Text,
+      //     category: bookInfo.book.category,
+      //     publisher: bookInfo.book.publisher,
+      //     yearFirstPublication: bookInfo.book.yearFirstPublication,
+      //     isbn: bookInfo.book.isbn,
+      //     pages: bookInfo.book.pages,
+      //     language: bookInfo.book.language
+      //   }
+      // },
 
+      handleBookInfoResponse: function() {
         var authorForename2Text = "";
         var authorSurname2Text = "";
         var authorForename3Text = "";
         var authorSurname3Text = "";
 
-        if (bookInfo.book.authors.length >= 2) {
-          authorForename2Text = bookInfo.book.authors[1].forename;
-          authorSurname2Text = bookInfo.book.authors[1].surname;
+        if (this.bookInfo.book.authors.length >= 2) {
+          authorForename2Text = this.bookInfo.book.authors[1].forename;
+          authorSurname2Text = this.bookInfo.book.authors[1].surname;
         }
 
-        if (bookInfo.book.authors.length === 3) {
-          authorForename3Text = bookInfo.book.authors[2].forename;
-          authorSurname3Text = bookInfo.book.authors[2].surname;
+        if (this.bookInfo.book.authors.length === 3) {
+          authorForename3Text = this.bookInfo.book.authors[2].forename;
+          authorSurname3Text = this.bookInfo.book.authors[2].surname;
         }
 
         this.bookFormInput = {
-          title: bookInfo.book.title,
-          subtitle: bookInfo.book.subtitle,
-          authorForename1: bookInfo.book.authors[0].forename,
-          authorSurname1: bookInfo.book.authors[0].surname,
+          title: this.bookInfo.book.title,
+          subtitle: this.bookInfo.book.subtitle,
+          authorForename1: this.bookInfo.book.authors[0].forename,
+          authorSurname1: this.bookInfo.book.authors[0].surname,
           authorForename2: authorForename2Text,
           authorSurname2: authorSurname2Text,
           authorForename3: authorForename3Text,
           authorSurname3: authorSurname3Text,
-          category: bookInfo.book.category,
-          publisher: bookInfo.book.publisher,
-          yearFirstPublication: bookInfo.book.yearFirstPublication,
-          isbn: bookInfo.book.isbn,
-          pages: bookInfo.book.pages,
-          language: bookInfo.book.language
+          category: this.bookInfo.book.category,
+          publisher: this.bookInfo.book.publisher,
+          yearFirstPublication: this.bookInfo.book.yearFirstPublication,
+          isbn: this.bookInfo.book.isbn,
+          pages: this.bookInfo.book.pages,
+          language: this.bookInfo.book.language
         }
       },
 
       handleMessage: function() {
+        console.log("handleMessage");
         if (this.editBookMessage.commandSucceeded) {
           window.location.href = `book-info/${this.bookId}/editsuccessful`;
         } else {

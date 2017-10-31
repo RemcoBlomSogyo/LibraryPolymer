@@ -1,0 +1,45 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="token-ajax">
+  <template>
+
+    <style>
+
+    </style>
+
+    <iron-ajax
+      id="ajaxElement"
+      url="http://localhost:9999/SogyoLibrary/rest/{{path}}"
+      method={{method}}
+      headers='{"Authorization": "Bearer {{idToken}}"}'
+      handle-as="json"
+      on-response="handleResponse">
+    </iron-ajax>
+  </template>
+
+  <script>
+    Polymer({
+      is: "token-ajax",
+      properties: {
+        id: String,
+        path: String,
+        method: String,
+        idToken: String,
+        responseData: {
+          type: Object,
+          notify: true
+        }
+      },
+      generateRequest: function() {
+        var googleUser = gapi.auth2.getAuthInstance().currentUser.get();
+        this.idToken = googleUser.getAuthResponse().id_token;
+        this.$.ajaxElement.generateRequest();
+      },
+      handleResponse: function(data) {
+        this.responseData = data.detail.response;
+      }
+
+    });
+  </script>
+</dom-module>

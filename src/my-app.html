@@ -22,7 +22,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
 
-<link rel="lazy-import" href="home-page.html">
+<link rel="import" href="../bower_components/google-signin/google-signin.html">
+
+<!-- <link rel="lazy-import" href="home-page.html"> -->
 <link rel="lazy-import" href="my-view404.html">
 <link rel="lazy-import" href="search-book.html">
 <link rel="lazy-import" href="add-book.html">
@@ -67,6 +69,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: black;
         font-weight: bold;
       }
+
+      google-signin {
+        float: right;
+      }
     </style>
 
     <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
@@ -82,7 +88,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="search-book" href="[[rootPath]]search-book">Zoeken</a>
-          <a name="home-page" href="[[rootPath]]home-page">Home</a>
+          <!-- <a name="home-page" href="[[rootPath]]home-page">Home</a> -->
           <a name="add-book" href="[[rootPath]]add-book">Toevoegen</a>
         </iron-selector>
       </app-drawer>
@@ -97,12 +103,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-toolbar>
         </app-header>
 
+        <google-signin
+          client-id="1000284014442-khpk4ottrb9c0njde9ho3nbqrkdo7p99.apps.googleusercontent.com"
+          scopes="email profile">
+        </google-signin>
+
         <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
             fallback-selection="my-view404"
             role="main">
-          <home-page name="home-page"></home-page>
+          <!-- <home-page name="home-page"></home-page> -->
           <my-view404 name="my-view404"></my-view404>
           <search-book name="search-book"></search-book>
           <add-book name="add-book"></add-book>
