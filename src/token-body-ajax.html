@@ -13,7 +13,6 @@
       url="http://localhost:9999/SogyoLibrary/rest/{{path}}"
       content-type="application/json"
       method={{method}}
-      headers='{"Authorization": "Bearer {{idToken}}"}'
       body={{body}}
       handle-as="json"
       on-response="handleResponse">
@@ -27,7 +26,6 @@
         id: String,
         path: String,
         method: String,
-        idToken: String,
         body: Object,
         responseData: {
           type: Object,
@@ -36,7 +34,7 @@
       },
       generateRequest: function() {
         var googleUser = gapi.auth2.getAuthInstance().currentUser.get();
-        this.idToken = googleUser.getAuthResponse().id_token;
+        this.$.ajaxElement.headers['Authorization'] = googleUser.getAuthResponse().id_token;
         this.$.ajaxElement.generateRequest();
       },
       handleResponse: function(data) {
