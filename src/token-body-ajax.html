@@ -15,7 +15,8 @@
       method={{method}}
       body={{body}}
       handle-as="json"
-      on-response="handleResponse">
+      on-response="handleResponse"
+      with-credentials="true">
     </iron-ajax>
   </template>
 
@@ -34,7 +35,7 @@
       },
       generateRequest: function() {
         var googleUser = gapi.auth2.getAuthInstance().currentUser.get();
-        this.$.ajaxElement.headers['Authorization'] = googleUser.getAuthResponse().id_token;
+        this.$.ajaxElement.headers['Authorization'] = "Bearer " + googleUser.getAuthResponse().id_token;
         this.$.ajaxElement.generateRequest();
       },
       handleResponse: function(data) {
