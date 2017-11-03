@@ -71,8 +71,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-weight: bold;
       }
 
-      google-signin {
+      #loginContainer {
         float: right;
+      }
+
+      #loginName {
+        text-align: center;
       }
     </style>
 
@@ -103,17 +107,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-toolbar>
         </app-header>
 
-        <google-signin
-          id="googleSignInButton"
-          client-id="1000284014442-khpk4ottrb9c0njde9ho3nbqrkdo7p99.apps.googleusercontent.com"
-          scopes="email profile">
-        </google-signin>
+        <div id="loginContainer">
+          <google-signin
+            id="googleSignInButton"
+            client-id="1000284014442-khpk4ottrb9c0njde9ho3nbqrkdo7p99.apps.googleusercontent.com"
+            scopes="email profile">
+          </google-signin>
+          <h4 id="loginName">{{registerMessage.userGivenName}} {{registerMessage.userFamilyName}}</h4>
+        </div>
 
         <token-ajax
           id="registerUser"
           path="register"
           method="POST"
-          response-data={{bookInfo}}>
+          response-data={{registerMessage}}>
         </token-ajax>
 
         <iron-pages
@@ -148,11 +155,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,
-          counter: {
-            type: Number,
-            value: 0
-          },
-          redirectPage: String
+          redirectPage: String,
+          registerMessage: Object
         };
       }
 
@@ -171,8 +175,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var googleUser = gapi.auth2.getAuthInstance().currentUser.get();
         this.idToken = {idTokenString: googleUser.getAuthResponse().id_token};
         this.$.registerUser.generateRequest();
-
-        console.log("_signInSuccessHandler")
         this.page = this.redirectPage;
       }
 
@@ -182,7 +184,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           page = 'sign-in';
         }
 
-        console.log("_routePageChanged - this.page:" + this.page + ", page:" + page + " " + this.counter++);
         // If no page was found in the route data, page will be an empty string.
         // Deault to 'view1' in that case.
 
