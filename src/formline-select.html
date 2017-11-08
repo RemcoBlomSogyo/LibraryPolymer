@@ -53,7 +53,10 @@
       is: "formline-select",
       properties: {
         name: String,
-        authors: Array,
+        authors: {
+          type: Array,
+          observer: "_setSelection"
+        },
         authorSelected: {
           type: String,
           observer: "_setSelection"
@@ -101,8 +104,17 @@
       },
 
       _setSelection: function() {
-        console.log(this.authorSelected);
-        this.$.selectField.value = this.authorSelected;
+        console.log("test setselection");
+        if (this.authors !== undefined && this.authorSelected !== undefined) {
+          console.log("authorselected: " + this.authorSelected);
+          console.log("authors: " + this.authors);
+          this.$.selectField.value = this.authorSelected;
+          console.log("select: " + this.$.selectField.value);
+          // if (this.$.selectField.value === "") {
+          //   console.log("loop");
+          //   this._setSelection();
+          // }
+        }
       }
     });
   </script>

@@ -105,7 +105,10 @@
           notify: true
         },
         buttonText: String,
-        authors: Array,
+        authors: {
+          type: Array,
+          observer: "setObjectInForm"
+        },
         authorsVisible: {
           type: Number,
           value: 1
@@ -131,19 +134,22 @@
         this.$.formLineAuthor3.style.display = "none";
         this.$.deleteAuthorButton.style.visibility = "hidden";
 
-        this.$.getAllAuthors.generateRequest();
+        if(this.authors === undefined) {
+          console.log("authors leeg");
+          this.$.getAllAuthors.generateRequest();
+        }
       },
 
       addAuthorFormLine: function() {
         if (this.authorsVisible === 1) {
           this.$.container.style.height = this.containerHeight2;
           this.$.formLineAuthor2.style.display = "block";
-          this.$.formLineAuthor2.style.display = "block";
+          // this.$.formLineAuthor2.style.display = "block";
           this.authorsVisible = 2;
         } else if (this.authorsVisible === 2) {
           this.$.container.style.height = this.containerHeight3;
           this.$.formLineAuthor3.style.display = "block";
-          this.$.formLineAuthor3.style.display = "block";
+          // this.$.formLineAuthor3.style.display = "block";
           this.$.addAuthorButton.style.visibility = "hidden";
           this.authorsVisible = 3;
         }
@@ -154,13 +160,13 @@
         if (this.authorsVisible === 2) {
           this.$.container.style.height = this.containerHeight1;
           this.$.formLineAuthor2.style.display = "none";
-          this.$.formLineAuthor2.style.display = "none";
+          // this.$.formLineAuthor2.style.display = "none";
           this.$.deleteAuthorButton.style.visibility = "hidden";
           this.authorsVisible = 1;
         } else if (this.authorsVisible === 3) {
           this.$.container.style.height = this.containerHeight2;
           this.$.formLineAuthor3.style.display = "none";
-          this.$.formLineAuthor3.style.display = "none";
+          // this.$.formLineAuthor3.style.display = "none";
           this.authorsVisible = 2;
         }
         this.$.addAuthorButton.style.visibility = "visible";
@@ -182,7 +188,7 @@
 
         author1Names = this._parseNameInTwoNames(author1);
         author2Names = this._parseNameInTwoNames(author2);
-        author3Names = this._parseNameInTwoNames(author2);
+        author3Names = this._parseNameInTwoNames(author3);
 
         this.bookFormInput = {
           title: this.$.formLineTitle.getInputValue(),
@@ -294,27 +300,32 @@
 
       setObjectInForm: function() {
         if (this.observerOn) {
-          this.$.formLineTitle.inputValue = this.bookFormInput.title;
-          this.$.formLineSubtitle.inputValue = this.bookFormInput.subtitle;
-          this.$.formLineAuthor1.authorSelected = this.bookFormInput.authorForename1 + " " + this.bookFormInput.authorSurname1;
-          console.log(this.bookFormInput.authorForename1 + " " + this.bookFormInput.authorSurname1);
+          console.log("test test");
+          console.log(this.bookFormInput);
+          console.log(this.authors);
+          if (this.bookFormInput !== undefined && this.authors !== undefined) {
+            this.$.formLineTitle.inputValue = this.bookFormInput.title;
+            this.$.formLineSubtitle.inputValue = this.bookFormInput.subtitle;
+            this.$.formLineAuthor1.authorSelected = this.bookFormInput.authorForename1 + " " + this.bookFormInput.authorSurname1;
+            console.log(this.bookFormInput.authorForename1 + " " + this.bookFormInput.authorSurname1);
 
-          if (this.bookFormInput.authorForename2 !== "") {
-            this.addAuthorFormLine();
-            this.$.formLineAuthor2.authorSelected = this.bookFormInput.authorForename2 + " " + this.bookFormInput.authorSurname2;
+            if (this.bookFormInput.authorForename2 !== "") {
+              this.addAuthorFormLine();
+              this.$.formLineAuthor2.authorSelected = this.bookFormInput.authorForename2 + " " + this.bookFormInput.authorSurname2;
+            }
+
+            if (this.bookFormInput.authorForename3 !== "") {
+              this.addAuthorFormLine();
+              this.$.formLineAuthor3.authorSelected = this.bookFormInput.authorForename3 + " " + this.bookFormInput.authorSurname3;
+            }
+
+            this.$.formLineCategory.inputValue = this.bookFormInput.category.name;
+            this.$.formLinePublisher.inputValue = this.bookFormInput.publisher.name;
+            this.$.formLineYearFirstPublication.inputValue = this.bookFormInput.yearFirstPublication;
+            this.$.formLineIsbn.inputValue = this.bookFormInput.isbn;
+            this.$.formLinePages.inputValue = this.bookFormInput.pages;
+            this.$.formLineLanguage.inputValue = this.bookFormInput.language;
           }
-
-          if (this.bookFormInput.authorForename3 !== "") {
-            this.addAuthorFormLine();
-            this.$.formLineAuthor3.authorSelected = this.bookFormInput.authorForename3 + " " + this.bookFormInput.authorSurname3;
-          }
-
-          this.$.formLineCategory.inputValue = this.bookFormInput.category.name;
-          this.$.formLinePublisher.inputValue = this.bookFormInput.publisher.name;
-          this.$.formLineYearFirstPublication.inputValue = this.bookFormInput.yearFirstPublication;
-          this.$.formLineIsbn.inputValue = this.bookFormInput.isbn;
-          this.$.formLinePages.inputValue = this.bookFormInput.pages;
-          this.$.formLineLanguage.inputValue = this.bookFormInput.language;
         }
       }
     });

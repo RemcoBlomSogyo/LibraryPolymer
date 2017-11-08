@@ -17,8 +17,15 @@
       response-data={{bookInfo}}>
     </token-ajax>
 
+    <token-ajax
+      id="getAllAuthors"
+      path="authors"
+      method="GET"
+      response-data={{authors}}>
+    </token-ajax>
+
     <br/>
-    <book-form id="book-form" add-edit-book-message={{editBookMessage}} book-form-input={{bookFormInput}} button-text="Wijzigen"></book-form>
+    <book-form id="book-form" add-edit-book-message={{editBookMessage}} book-form-input={{bookFormInput}} button-text="Wijzigen" authors={{authors}}></book-form>
     <h3 id="containerMessage">{{message}}</h3>
   </template>
 
@@ -36,13 +43,21 @@
           type: Object,
           observer: "handleMessage"
         },
-        message: String
+        message: String,
+        authors: {
+          type: Array,
+          observer: "_getBookInfo"
+        }
       },
 
       ready: function() {
         var url = document.location.href;
         var urlParts = url.split('/');
         this.bookId = urlParts.pop();
+        this.$.getAllAuthors.generateRequest();
+      },
+
+      _getBookInfo: function() {
         this.$.requestBookInfo.generateRequest();
       },
 
