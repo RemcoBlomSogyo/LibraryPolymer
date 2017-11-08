@@ -1,0 +1,90 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="user-info-item.html">
+<link rel="import" href="token-ajax.html">
+<link rel="import" href="token-body-ajax.html">
+<link rel="import" href="shared-styles.html">
+
+
+<dom-module id="user-roles">
+  <template>
+
+    <style include="shared-styles">
+      #container {
+        height: 120px;
+        width: 300px;
+        background-color: var(--app-primary-color);
+        padding: 10px;
+      }
+
+      h4 {
+        width: 48%;
+        display: inline-block;
+        color: white;
+      }
+
+      #saveButton {
+        float: right;
+        overflow-y: hidden;
+      }
+    </style>
+
+    <token-ajax
+      id="getAllUsers"
+      path="users"
+      method="GET"
+      response-data={{users}}>
+    </token-ajax>
+
+    <token-body-ajax
+      id="editAllUsers"
+      path="users"
+      method="PUT"
+      body={{users}}
+      response-data="{{editUsersMessage}}">
+    </token-body-ajax>
+
+    <br/>
+    <div id="container">
+      <h4>Naam</h4>
+      <h4>Admin</h4>
+      <template is="dom-repeat" items="{{users}}">
+        <user-info-item id={{item.id}} given-name={{item.givenName}} family-name={{item.familyName}} user-type={{item.userType}}></user-info-item>
+      </template>
+      <paper-button raised id="saveButton" on-tap="_saveUserRoles">Opslaan</paper-button>
+    </div>
+    <h3 id="containerMessage">{{editUsersMessage.message}}</h3>
+  </template>
+
+  <script>
+    Polymer({
+      is: "user-roles",
+      properties: {
+        users: {
+          type: Array,
+          notify: true,
+          observer: "_setHeightContainer"
+        },
+        editUsersMessage: Object
+      },
+
+      ready: function() {
+        this.$.getAllUsers.generateRequest();
+      },
+
+      _saveUserRoles: function() {
+        console.log(this.users);
+        this.$.editAllUsers.generateRequest();
+      },
+
+      _setHeightContainer: function() {
+        var numUsers = this.users.length;
+        var initialHeight = 120;
+        var heightPerUser = 56;
+        var heightContainer = initialHeight + heightPerUser * numUsers;
+        this.$.container.style.height = heightContainer + "px";
+      }
+
+    });
+  </script>
+</dom-module>

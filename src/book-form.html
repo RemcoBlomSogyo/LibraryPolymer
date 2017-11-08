@@ -41,16 +41,6 @@
       }
     </style>
 
-    <!-- <iron-ajax
-      id="addBook"
-      url="http://localhost:9999/SogyoLibrary/rest/book"
-      content-type="application/json"
-      method="POST"
-      body={{bookFormInput}}
-      handle-as="json"
-      on-response="handleMessageResponse">
-    </iron-ajax> -->
-
     <token-body-ajax
       id="addBook"
       path="book"
@@ -59,16 +49,6 @@
       response-data="{{addEditBookMessage}}">
     </token-body-ajax>
 
-    <!-- <iron-ajax
-      id="editBook"
-      url="http://localhost:9999/SogyoLibrary/rest/book/{{bookId}}"
-      content-type="application/json"
-      method="PUT"
-      body={{bookFormInput}}
-      handle-as="json"
-      on-response="handleMessageResponse">
-    </iron-ajax> -->
-
     <token-body-ajax
       id="editBook"
       path="book/{{bookId}}"
@@ -76,14 +56,6 @@
       body={{bookFormInput}}
       response-data="{{addEditBookMessage}}">
     </token-body-ajax>
-
-    <!-- <iron-ajax
-      id="getAllAuthors"
-      url="http://localhost:9999/SogyoLibrary/rest/authors"
-      method="GET"
-      handle-as="json"
-      on-response="handleAuthorsResponse">
-    </iron-ajax> -->
 
     <token-ajax
       id="getAllAuthors"

@@ -60,13 +60,13 @@
       </tr>
     </table>
 
-    <h4 id="copiesAvailableContainer">Beschikbaar: <span id="copiesavailable">{{copiesAvailable}}</span></h4>
-    <paper-button raised id="plus-button" on-tap="addCopy">+</paper-button>
-    <paper-button raised id="minus-button" on-tap="deleteCopy">-</paper-button>
+    <h4 id="copiesAvailableContainer">Te leen: <span id="copiesavailable">{{copiesAvailable}}</span></h4>
+    <paper-button raised id="plusButton" on-tap="addCopy" hidden>+</paper-button>
+    <paper-button raised id="minusButton" on-tap="deleteCopy" hidden>-</paper-button>
     <h4>Uitgeleend: 0</h4>
 
-    <paper-button raised id="edit-book-button" on-tap="goToEditBook">Boek wijzigen</paper-button>
-    <paper-button raised id="delete-book-button" on-tap="deleteBook">Boek verwijderen</paper-button>
+    <paper-button raised id="editBookButton" on-tap="goToEditBook" hidden>Boek wijzigen</paper-button>
+    <paper-button raised id="deleteBookButton" on-tap="deleteBook" hidden>Boek verwijderen</paper-button>
 
     <h4 id="containerMessage">{{message}}</h4>
 
@@ -122,7 +122,11 @@
           type: String,
           value: "Auteur"
         },
-        authors: String
+        authors: String,
+        userType: {
+          type: Number,
+          value: 1
+        }
       },
 
       ready: function() {
@@ -152,6 +156,10 @@
 
         if (this.bookInfo.book.authors.length === 3) {
           this.authors += (", " + this.bookInfo.book.authors[2].forename + " " + this.bookInfo.book.authors[2].surname);
+        }
+
+        if (this.userType === 2) {
+          this._showButtons();
         }
       },
 
@@ -188,6 +196,13 @@
 
       deleteBook: function() {
         this.$.deleteBook.generateRequest();
+      },
+
+      _showButtons: function() {
+        this.$.plusButton.hidden = false;
+        this.$.minusButton.hidden = false;
+        this.$.editBookButton.hidden = false;
+        this.$.deleteBookButton.hidden = false;
       }
     });
   </script>

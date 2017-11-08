@@ -1,0 +1,51 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<dom-module id="user-info-item">
+  <template>
+
+    <style>
+      #userName {
+        width: 48%;
+        display: inline-block;
+        color: white;
+      }
+
+      #toggleButton {
+        width: 48%;
+        display: inline-block;
+      }
+    </style>
+
+    <p id="userName">{{givenName}} {{familyName}}</p>
+    <paper-toggle-button id="toggleButton" on-change="_changeUserType"></paper-toggle-button>
+  </template>
+
+  <script>
+    Polymer({
+      is: "user-info-item",
+      properties: {
+        givenName: String,
+        familyName: String,
+        userType: {
+          type: Number,
+          notify: true
+        }
+      },
+
+      ready: function() {
+        if (this.userType === 2) {
+          this.$.toggleButton.checked = true;
+        }
+      },
+
+      _changeUserType: function() {
+        if (this.userType === 1) {
+          this.userType = 2;
+        } else {
+          this.userType = 1;
+        }
+      }
+    });
+  </script>
+</dom-module>

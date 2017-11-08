@@ -31,6 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="book-info.html">
 <link rel="lazy-import" href="edit-book.html">
 <link rel="lazy-import" href="sign-in.html">
+<link rel="lazy-import" href="user-roles.html">
 
 <dom-module id="my-app">
   <template>
@@ -92,8 +93,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="search-book" href="[[rootPath]]search-book">Zoeken</a>
-          <a name="add-book" href="[[rootPath]]add-book">Toevoegen</a>
+          <a id="selectorSignIn" name="sign-in" href="[[rootPath]]sign-in">Login</a>
+          <a id="selectorSearchBook" name="search-book" href="[[rootPath]]search-book">Zoeken</a>
+          <a id="selectorAddBook" name="add-book" href="[[rootPath]]add-book">Toevoegen</a>
+          <a id="selectorUserRoles" name="user-roles" href="[[rootPath]]user-roles">Gebruikers</a>
         </iron-selector>
       </app-drawer>
 
@@ -128,12 +131,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="my-view404"
             role="main">
-          <my-view404 name="my-view404"></my-view404>
-          <search-book name="search-book"></search-book>
-          <add-book name="add-book"></add-book>
-          <book-info name="book-info"></book-info>
-          <edit-book name="edit-book"></edit-book>
-          <sign-in name="sign-in"></sign-in>
+          <my-view404 id="pageMyView404" name="my-view404" hidden></my-view404>
+          <search-book id="pageSearchBook" name="search-book" hidden></search-book>
+          <add-book id="pageAddBook" name="add-book" hidden></add-book>
+          <book-info id="pageBookInfo" name="book-info" user-type={{registerMessage.userType}} hidden></book-info>
+          <edit-book id="pageEditBook" name="edit-book" hidden></edit-book>
+          <sign-in id="pageSignIn" name="sign-in"></sign-in>
+          <user-roles id="pageUserRoles" name="user-roles" hidden></user-roles>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
@@ -156,7 +160,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // Polymer.Element#rootPath
           rootPath: String,
           redirectPage: String,
-          registerMessage: Object
+          registerMessage: {
+            type: Object,
+            observer: "_showSelectorsAndPages"
+          }
         };
       }
 
@@ -169,6 +176,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ready() {
         super.ready();
         this.addEventListener('google-signin-success', this._signInSuccessHandler);
+        this.addEventListener('google-signed-out', this._signedOutHandler);
+        this._hideSelectors();
       }
 
       _signInSuccessHandler() {
@@ -176,6 +185,75 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.idToken = {idTokenString: googleUser.getAuthResponse().id_token};
         this.$.registerUser.generateRequest();
         this.page = this.redirectPage;
+        this._hideSignInSelectorAndPage();
+      }
+
+      _signedOutHandler() {
+        this.page = 'sign-in';
+        this.registerMessage = null;
+        this._showSignInSelectorAndPage();
+        this._hideSelectorsAndPages();
+      }
+
+      _hideSignInSelectorAndPage() {
+        this.$.selectorSignIn.style.display = "none";
+        this.$.pageSignIn.hidden = true;
+      }
+
+      _hideSelectorsAndPages() {
+        this._hideSelectors();
+        this._hidePages();
+      }
+
+      _hideSelectors() {
+        this.$.selectorSearchBook.style.display = "none";
+        this.$.selectorAddBook.style.display = "none";
+        this.$.selectorUserRoles.style.display = "none";
+      }
+
+      _hidePages() {
+        this.$.pageMyView404.hidden = true;
+        this.$.pageSearchBook.hidden = true;
+        this.$.pageAddBook.hidden = true;
+        this.$.pageBookInfo.hidden = true;
+        this.$.pageEditBook.hidden = true;
+        this.$.pageUserRoles.hidden = true;
+      }
+
+      _showSignInSelectorAndPage() {
+        this.$.selectorSignIn.style.display = "block";
+        this.$.pageSignIn.hidden = false;
+      }
+
+      _showSelectorsAndPages() {
+        if (this.registerMessage !== null) {
+          this._showSelectors();
+          this._showPages();
+        }
+      }
+
+      _showSelectors() {
+        if (this.registerMessage.userType >= 1) {
+          this.$.selectorSearchBook.style.display = "block";
+        }
+        if (this.registerMessage.userType === 2) {
+          this.$.selectorAddBook.style.display = "block";
+          this.$.selectorUserRoles.style.display = "block";
+        }
+      }
+
+      _showPages() {
+        console.log(this.registerMessage.userType);
+        if (this.registerMessage.userType >= 1) {
+          this.$.pageMyView404.hidden = false;
+          this.$.pageSearchBook.hidden = false;
+          this.$.pageBookInfo.hidden = false;
+        }
+        if (this.registerMessage.userType === 2) {
+          this.$.pageUserRoles.hidden = false;
+          this.$.pageEditBook.hidden = false;
+          this.$.pageAddBook.hidden = false;
+        }
       }
 
       _routePageChanged(page) {
