@@ -72,28 +72,28 @@
 
     <token-ajax
       id="requestBookInfo"
-      path="book/{{bookId}}"
+      path="books/{{bookId}}"
       method="GET"
       response-data={{bookInfo}}>
     </token-ajax>
 
     <token-ajax
       id="addCopy"
-      path="book/{{bookId}}/copy"
+      path="books/{{bookId}}/copies"
       method="POST"
       response-data={{copyMessage}}>
     </token-ajax>
 
     <token-ajax
       id="deleteCopy"
-      path="book/{{bookId}}/copy"
+      path="books/{{bookId}}/copies"
       method="DELETE"
       response-data={{copyMessage}}>
     </token-ajax>
 
     <token-ajax
       id="deleteBook"
-      path="book/{{bookId}}"
+      path="books/{{bookId}}"
       method="DELETE"
       response-data={{deleteBookMessage}}>
     </token-ajax>

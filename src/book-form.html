@@ -43,7 +43,7 @@
 
     <token-body-ajax
       id="addBook"
-      path="book"
+      path="books"
       method="POST"
       body={{bookFormInput}}
       response-data="{{addEditBookMessage}}">
@@ -51,7 +51,7 @@
 
     <token-body-ajax
       id="editBook"
-      path="book/{{bookId}}"
+      path="books/{{bookId}}"
       method="PUT"
       body={{bookFormInput}}
       response-data="{{addEditBookMessage}}">
