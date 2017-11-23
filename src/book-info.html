@@ -82,7 +82,10 @@
     <paper-button raised id="minusButton" on-tap="deleteCopy" hidden>-</paper-button>
     <h4>Uitgeleend: <span id="copiesBorrowed">{{copiesBorrowed}}</span></h4>
 
-
+    <!-- A date could be input here, but it is not sent to the server yet.
+        The javascript checks for valid date already.
+        It have to be sent as json in the borrrowCopy post.
+        The rest controller in the backend has no parameter to get the json yet-->
     <p id="textToggleButton">Datum ophalen</p>
     <paper-toggle-button id="toggleButton" on-change="_showOrHideDateInput"></paper-toggle-button>
     <input id="inputDay" class="inputField inputFieldSmall" type="text" placeholder="dd" hidden></input>
