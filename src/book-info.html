@@ -1,6 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="token-ajax.html">
 
 <dom-module id="book-info">
@@ -17,6 +18,22 @@
       }
 
       #copiesAvailableContainer {
+        display: inline;
+      }
+
+      .inputFieldSmall {
+        width: 25px;
+      }
+
+      .inputFieldLarge {
+        width: 50px;
+      }
+
+      paper-toggle-button {
+        display: inline;
+      }
+
+      #textToggleButton {
         display: inline;
       }
     </style>
@@ -60,11 +77,20 @@
       </tr>
     </table>
 
-    <h4 id="copiesAvailableContainer">Te leen: <span id="copiesavailable">{{copiesAvailable}}</span></h4>
+    <h4 id="copiesAvailableContainer">Te leen: <span id="copiesAvailable">{{copiesAvailable}}</span></h4>
     <paper-button raised id="plusButton" on-tap="addCopy" hidden>+</paper-button>
     <paper-button raised id="minusButton" on-tap="deleteCopy" hidden>-</paper-button>
-    <h4>Uitgeleend: 0</h4>
+    <h4>Uitgeleend: <span id="copiesBorrowed">{{copiesBorrowed}}</span></h4>
 
+
+    <p id="textToggleButton">Datum ophalen</p>
+    <paper-toggle-button id="toggleButton" on-change="_showOrHideDateInput"></paper-toggle-button>
+    <input id="inputDay" class="inputField inputFieldSmall" type="text" placeholder="dd" hidden></input>
+    <input id="inputMonth" class="inputField inputFieldSmall" type="text" placeholder="mm" hidden></input>
+    <input id="inputYear" class="inputField inputFieldLarge" type="text" placeholder="yyyy" hidden></input>
+    <br/>
+    <br/>
+    <paper-button raised id="borrowCopyButton" on-tap="_borrowCopy" hidden>Exemplaar lenen</paper-button>
     <paper-button raised id="editBookButton" on-tap="goToEditBook" hidden>Boek wijzigen</paper-button>
     <paper-button raised id="deleteBookButton" on-tap="deleteBook" hidden>Boek verwijderen</paper-button>
 
@@ -97,6 +123,13 @@
       method="DELETE"
       response-data={{deleteBookMessage}}>
     </token-ajax>
+
+    <token-ajax
+      id="borrowCopy"
+      path="users/{{userId}}/books/{{bookId}}"
+      method="POST"
+      response-data={{borrowCopyMessage}}>
+    </token-ajax>
   </template>
 
   <script>
@@ -123,13 +156,20 @@
           value: "Auteur"
         },
         authors: String,
-        userType: {
-          type: Number,
-          value: 1
-        }
+        userType: Number,
+        userId: Number,
+        borrowCopyMessage: {
+          type: Object,
+          observer: "_handleBorrowCopyResponse"
+        },
+        day: Number,
+        month: Number,
+        year: Number
       },
 
       ready: function() {
+        this._setDateInInput();
+
         var url = document.location.href;
         var urlParts = url.split('/');
         var lastUrlPart = urlParts.pop();
@@ -147,6 +187,7 @@
 
       handleBookInfoResponse: function() {
         this.copiesAvailable = this.bookInfo.copiesAvailable;
+        this.copiesBorrowed = this.bookInfo.copiesBorrowed;
         this.authors = (this.bookInfo.book.authors[0].forename + " " + this.bookInfo.book.authors[0].surname);
 
         if (this.bookInfo.book.authors.length >= 2) {
@@ -158,8 +199,12 @@
           this.authors += (", " + this.bookInfo.book.authors[2].forename + " " + this.bookInfo.book.authors[2].surname);
         }
 
+        if (this.userId >= 1) {
+          this._showBorrowCopyButton();
+        }
+
         if (this.userType === 2) {
-          this._showButtons();
+          this._showUserType2Buttons();
         }
       },
 
@@ -198,11 +243,70 @@
         this.$.deleteBook.generateRequest();
       },
 
-      _showButtons: function() {
+      _showBorrowCopyButton: function() {
+        this.$.borrowCopyButton.hidden = false;
+      },
+
+      _showUserType2Buttons: function() {
         this.$.plusButton.hidden = false;
         this.$.minusButton.hidden = false;
         this.$.editBookButton.hidden = false;
         this.$.deleteBookButton.hidden = false;
+      },
+
+      _handleBorrowCopyResponse: function() {
+        this.message = this.borrowCopyMessage.message;
+        if (this.borrowCopyMessage.commandSucceeded) {
+          this.copiesAvailable = this.borrowCopyMessage.copiesAvailable;
+          this.copiesBorrowed = this.borrowCopyMessage.copiesBorrowed;
+        }
+      },
+
+      _borrowCopy: function() {
+        console.log(this.userId);
+
+        this._getDateFromInput();
+        if (this._isValidDate()) {
+          this.message = "";
+          this.$.borrowCopy.generateRequest();
+        } else {
+          this.message = "Datum ongeldig";
+        }
+      },
+
+      _setDateInInput: function() {
+        var date = new Date();
+        this.$.inputDay.value = date.getDate();
+        this.$.inputMonth.value = date.getMonth() + 1;
+        this.$.inputYear.value = date.getFullYear();
+      },
+
+      _getDateFromInput: function() {
+        this.day = this.$.inputDay.value;
+        this.month = this.$.inputMonth.value;
+        this.year = this.$.inputYear.value;
+      },
+
+      _showOrHideDateInput: function() {
+        if (this.$.toggleButton.checked) {
+          this.$.inputDay.hidden = false;
+          this.$.inputMonth.hidden = false;
+          this.$.inputYear.hidden = false;
+        } else {
+          this.$.inputDay.hidden = true;
+          this.$.inputMonth.hidden = true;
+          this.$.inputYear.hidden = true;
+        }
+      },
+
+      _isValidDate: function() {
+        if (this.month < 1 || this.month > 12) {
+          return false;
+        } else if (this.day < 1 || this.day > 31) {
+          return false;
+        } else {
+          return true;
+        }
       }
     });
   </script>
