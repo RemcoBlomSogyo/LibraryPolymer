@@ -1,8 +1,8 @@
 # Sogyo Library - Frontend built with Polymer Starter Kit 2
 
-This is frontend of the Sogyo Library app. For the backend: https://git.sogyo.nl/rblom/SogyoLibrary. If you start working on this project, make sure you have the right port in token-ajax and token-body-ajax. Ohterwise you can't connect to the rest service. At this moment the port is 9999.
+This is the frontend of the Sogyo Library app. For the backend: https://git.sogyo.nl/rblom/SogyoLibrary. If you start working on this project, make sure you have the right port in token-ajax and token-body-ajax. Ohterwise you can't connect to the rest service. At this moment the port is 9999.
 
-I added a comment in book-info.html: the date input is not working yet.
+I added a comment in book-info.html: the date input is not sent to the server yet.
 
 For this project the Polymer Starter Kit 2 was used.
 For more information about Polymer and this Starter Kit see the description below.
