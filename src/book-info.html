@@ -209,7 +209,6 @@
       },
 
       handleCopyResponse: function() {
-        console.log(this.copyMessage);
         if (this.copyMessage.commandSucceeded) {
           this.copiesAvailable = this.copyMessage.copiesOfBook;
         }
@@ -229,7 +228,6 @@
       },
 
       deleteCopy: function() {
-        console.log(this.copiesAvailable);
         if (this.copiesAvailable > 0) {
           this.$.deleteCopy.generateRequest();
         }
@@ -263,8 +261,6 @@
       },
 
       _borrowCopy: function() {
-        console.log(this.userId);
-
         this._getDateFromInput();
         if (this._isValidDate()) {
           this.message = "";

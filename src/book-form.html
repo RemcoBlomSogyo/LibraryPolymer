@@ -143,12 +143,10 @@
         if (this.authorsVisible === 1) {
           this.$.container.style.height = this.containerHeight2;
           this.$.formLineAuthor2.style.display = "block";
-          // this.$.formLineAuthor2.style.display = "block";
           this.authorsVisible = 2;
         } else if (this.authorsVisible === 2) {
           this.$.container.style.height = this.containerHeight3;
           this.$.formLineAuthor3.style.display = "block";
-          // this.$.formLineAuthor3.style.display = "block";
           this.$.addAuthorButton.style.visibility = "hidden";
           this.authorsVisible = 3;
         }
@@ -159,13 +157,11 @@
         if (this.authorsVisible === 2) {
           this.$.container.style.height = this.containerHeight1;
           this.$.formLineAuthor2.style.display = "none";
-          // this.$.formLineAuthor2.style.display = "none";
           this.$.deleteAuthorButton.style.visibility = "hidden";
           this.authorsVisible = 1;
         } else if (this.authorsVisible === 3) {
           this.$.container.style.height = this.containerHeight2;
           this.$.formLineAuthor3.style.display = "none";
-          // this.$.formLineAuthor3.style.display = "none";
           this.authorsVisible = 2;
         }
         this.$.addAuthorButton.style.visibility = "visible";
@@ -226,14 +222,6 @@
         };
         return name;
       },
-
-      // handleMessageResponse: function(data) {
-      //   this.addEditBookMessage = data.detail.response;
-      // },
-
-      // handleAuthorsResponse: function(data) {
-      //   this.authors = data.detail.response;
-      // },
 
       validateInput: function() {
         var inputIsValid = true;
