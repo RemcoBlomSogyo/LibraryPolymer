@@ -1,5 +1,12 @@
 # Sogyo Library - Frontend built with Polymer Starter Kit 2
 
+This is frontend of the Sogyo Library app. For the backend: https://git.sogyo.nl/rblom/SogyoLibrary. If you start working on this project, make sure you have the right port in token-ajax and token-body-ajax. Ohterwise you can't connect to the rest service. At this moment the port is 9999.
+
+I added a comment in book-info.html: the date input is not working yet.
+
+For this project the Polymer Starter Kit 2 was used.
+For more information about Polymer and this Starter Kit see the description below.
+
 ### Setup
 
 ##### Prerequisites
@@ -12,12 +19,6 @@ First, install [Polymer CLI](https://github.com/Polymer/polymer-cli) using
 Second, install [Bower](https://bower.io/) using [npm](https://www.npmjs.com)
 
     npm install -g bower
-
-##### Initialize project from template
-
-    mkdir my-app
-    cd my-app
-    polymer init polymer-2-starter-kit
 
 ### Start the development server
 
