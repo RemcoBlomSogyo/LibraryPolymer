@@ -12,7 +12,12 @@
     "src/my-view404.html",
     "src/scrollable-list.html",
     "src/search-book.html",
-    "src/search-form.html"
+    "src/search-form.html",
+    "src/sign-in.html",
+    "src/token-ajax.html",
+    "src/token-body-ajax.html",
+    "src/user-info-item.html",
+    "src/user-roles.html"
   ],
   "sources": [
     "src/**/*",
